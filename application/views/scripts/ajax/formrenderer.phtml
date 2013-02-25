@@ -1,0 +1,8 @@
+<?php echo $this->form->render(); ?>
+<script type="text/javascript">
+$(document).ready(function() {    
+    $("#dialog_box form").submit(function(){
+        $("#dialog_box").append('<p class="center"><img src="<?php echo SITE_ROOT; ?>img/loadingAnimation.gif"/></p>');
+    });
+});
+</script>

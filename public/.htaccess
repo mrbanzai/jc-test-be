@@ -1,0 +1,25 @@
+RewriteEngine On
+
+# Add Encoding for gzip compressed files
+AddEncoding gzip .jgz
+
+# if a gzip js file is available, use it instead
+RewriteCond %{HTTP:Accept-Encoding} gzip
+RewriteCond %{REQUEST_FILENAME}.jgz -f
+RewriteRule (.*)\.js$ $1\.js.jgz [L]
+AddType "text/javascript" .js.jgz
+
+# turn off magic quotes cause they are bad
+php_flag magic_quotes_gpc Off
+
+Rewritebase /
+
+# appropriately handle non-routed files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}	!\.(js|ico|gif|jpg|jpeg|png|css)$ [OR]
+RewriteCond %{REQUEST_FILENAME}	theme\.css$
+RewriteRule ^.*$ /index.php
+
+# Security: Don't allow browsing of directories
+Options -Indexes

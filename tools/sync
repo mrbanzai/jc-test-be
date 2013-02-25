@@ -1,0 +1,27 @@
+#!/bin/bash
+
+[[ "$1" == "in" ]] && SYNCDIR="in" || SYNCDIR="out"
+MYBRANCH=`git symbolic-ref --short HEAD`
+CONFIGLINE=`grep -m1 $MYBRANCH .syncfile`
+CONFIGPAT="^(.+)%(.+)%(.+)$"
+[[ $CONFIGLINE =~ $CONFIGPAT ]] && HOST="${BASH_REMATCH[2]}" && RFOLDER="${BASH_REMATCH[3]}" || exit 1
+TMPFILE=`mktemp -t sync` || exit 1
+echo Temp file: $TMPFILE
+echo Branch: $MYBRANCH
+echo Host: $HOST
+echo Remote folder: $RFOLDER
+echo Sync direction: $SYNCDIR
+
+git status --porcelain | grep \?\? | cut -d" " -f2 | xargs -I{} -n1 echo "/{}" > $TMPFILE
+for i in {public/local.php,tools/,Makefile}
+do
+	echo $i >> $TMPFILE
+done
+
+[[ "$2" == "test" ]] && RSYNCARGS="-rvznic" || RSYNCARGS="-rvzic"
+
+if [[ $SYNCDIR == "in" ]]; then
+	rsync $RSYNCARGS --delete --exclude=.gitignore --exclude-from=.gitignore --exclude-from=$TMPFILE root@$HOST:$RFOLDER/* .
+else
+	rsync $RSYNCARGS --exclude=.gitignore --exclude-from=.gitignore --exclude-from=$TMPFILE ./* root@$HOST:$RFOLDER/
+fi

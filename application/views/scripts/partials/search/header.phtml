@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://ogp.me/ns#"
+      xmlns:fb="http://www.facebook.com/2008/fbml">
+	<head>
+		<?php
+		$title = !empty($this->theme['company']) ? $this->theme['company'] . ' | Jobs' : 'JobCastle | Jobs';
+		if (!empty($this->title)) {
+			foreach ((array) $this->title as $t) {
+				$title .= ' | ' . Clean::xss($t);
+			}
+		}
+		?>
+		<meta charset="utf-8" />
+		<meta content="<?php echo $this->csrfToken(); ?>" name="csrf-token" />
+		<meta name="description" content="<?php echo !empty($this->description) ? $this->escape(substr($this->description, 0, 155)) : ''; ?>" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="" />
+		<meta property="og:image" content="<?php echo !empty($this->theme['logo']) ? $this->escape($this->serverUrl() . $this->theme['logo']) : ''; ?>" />
+		<meta property="og:site_name" content="<?php echo !empty($this->theme['company']) ? $this->escape($this->theme['company']) : 'JobCastle'; ?>" />
+		<meta property="og:title" content="<?php echo $title; ?>" />
+		<meta property="og:description" content="<?php echo !empty($this->description) ? $this->escape(substr($this->description, 0, 155)) : ''; ?>" />
+		<meta property="fb:admins" content="<?php echo !empty($this->og['admin']) ? $this->escape($this->og['admin']) : ''; ?>" />
+		<?php
+		$this->headTitle((!empty($this->theme['company']) ? $this->theme['company'] . ' | Jobs' : 'JobCastle | Jobs'), 'APPEND')->setSeparator(' | ');
+		if (!empty($this->title)) {
+			foreach ((array) $this->title as $title) {
+				$this->headTitle()->append($title);
+			}
+		}
+		echo $this->headTitle();
+
+        $this->headLink()->prependStylesheet('/css/chosen.css');
+		$this->headLink()->prependStylesheet('/css/theme.css');
+		$this->headLink()->prependStylesheet('/css/global.css');
+
+		echo $this->headLink();
+		echo $this->placeholder('css');
+		echo $this->headScript();
+		?>
+	</head>
+	<body id="search">

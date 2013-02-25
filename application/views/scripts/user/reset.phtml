@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+	<meta content="<?php echo $this->csrfToken(); ?>" name="csrf-token" />
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <?php
+	$this->headTitle((!empty($this->theme['company']) ? $this->theme['company'] : 'JobCastle'), 'APPEND')->setSeparator(' | ');
+	if (!empty($this->title)) {
+		foreach ((array) $this->title as $title) {
+			$this->headTitle()->append($title);
+		}
+	}
+	echo $this->headTitle();
+
+    $this->headLink()->appendStylesheet('/css/admin/black/style.css');
+    $this->headLink()->appendStylesheet('/css/admin/black/visualize.css');
+
+    echo $this->headLink();
+    echo $this->placeholder('css');
+    echo $this->headScript();
+    ?>
+    <!--[if lt IE 8]><style type="text/css" media="all">@import url("/css/admin/black/ie.css");</style><![endif]-->
+</head>
+<body>
+	<div id="hld">
+		<div class="wrapper">
+            <div id="forgotBlock" class="block small center login">
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					<h2>Reset Password</h2>
+				</div>
+				<div class="block_content">
+                    <?php
+                    echo $this->partial(
+                        'partials/global/flash-messenger.phtml',
+                        array('message' => '<div class="message info"><p>You may change your forgotten password by entering it below.</p></div>')
+                    );
+                    ?>
+					<form action="/user/reset/<?php echo Clean::xss($this->id); ?>/" method="post" id="forgotForm">
+						<p>
+							<label for="password">Password:</label> <br />
+							<input type="password" class="text" name="password" id="password" value="" />
+						</p>
+						<p>
+							<label for="password_confirm">Confirm Password:</label> <br />
+							<input type="password" class="text" name="password_confirm" id="password_confirm" value="" />
+						</p>
+
+						<p>
+							<input type="submit" class="submit long" value="Reset my Password" />
+							or <a href="#" id="btnLogin" class="formToggle button">click here to login</a>
+						</p>
+					</form>
+				</div>
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+            </div>
+		</div>
+	</div>
+
+	<!--[if IE]><script type="text/javascript" src="/js/admin/excanvas.js"></script><![endif]-->
+	<script type="text/javascript" src="/js/admin/jquery.js"></script>
+    <script type="text/javascript" src="/js/global.js"></script>
+	<script type="text/javascript" src="/js/admin/jquery.img.preload.js"></script>
+	<script type="text/javascript" src="/js/admin/jquery.select_skin.js"></script>
+	<script type="text/javascript" src="/js/admin/jquery.pngfix.js"></script>
+	<script type="text/javascript" src="/js/admin/custom.js"></script>
+    <?php echo $this->partial('partials/global/error-form.phtml', array('errors' => !empty($this->errors) ? $this->errors : NULL)); ?>
+    <?php
+    echo $this->inlineScript();
+    echo $this->placeholder('js');
+    ?>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<div id="header">
+    <h1 id="logo">
+        <a href="/">
+            <?php echo !empty($this->theme['logo']) ? '<img src="' . $this->theme['logo'] . '" alt="' . (!empty($this->theme['company']) ? Clean::xss($this->theme['company']) : '') . '" />' : ''; ?>
+            <?php echo !empty($this->theme['company']) ? '<span>' . Clean::xss($this->theme['company']) . '</span>' : '<span>JobCastle</span>'; ?>
+        </a>
+    </h1>
+</div>
+<div id="searchblock" class="clearfix">
+    <div class="wrapper">
+        <form method="post" action="/search/" class="searchbar">
+            <input type="text" name="search" id="q" placeholder="Enter a job title" />
+            <button type="submit" id="submit" value="search">search</button>
+            <select name="location" id="location" class="chzn" title="Location" style="visibility:hidden">
+                <?php echo $this->dropdownLocations; ?>
+            </select>
+            <select name="category" id="category" class="chzn" title="Category" style="visibility:hidden">
+                <?php echo $this->dropdownCategories; ?>
+            </select>
+        </form>
+    </div>
+</div>
+<div class="pattern columns centered">
+    <div class="column">
+        <h3>Recent Listings</h3>
+        <?php if (!empty($this->recent)): ?>
+        <ul>
+            <?php foreach ($this->recent as $recent): ?>
+            <?php
+            $url = '/job/details/';
+            if (!empty($recent['location'])) $url .= Clean::uristub($recent['location']) . '/';
+            if (!empty($recent['category'])) $url .= Clean::uristub($recent['category']) . '/';
+            $url .= Clean::uristub($recent['uristub']) . '/';
+            ?>
+            <li><a href="<?php echo $url; ?>"><?php echo Clean::xss($recent['name']); ?></a></li>
+            <?php endforeach; ?>
+            <li class="centered last">
+                <a href="/jobs/all" class="btn">See All Jobs</a>
+            </li>
+        </ul>
+        <?php else: ?>
+        <p>No recent listings exist.</p>
+        <?php endif; ?>
+    </div>
+    <div class="column">
+        <h3>By Category</h3>
+        <?php if (!empty($this->categories)): ?>
+        <ul>
+            <?php foreach ($this->categories as $category): ?>
+            <li><a href="/jobs/<?php echo Clean::uristub($category['category']); ?>"><?php echo Clean::xss($category['category']); ?> (<?php echo number_format($category['total'], 0); ?>)</a></li>
+            <?php endforeach; ?>
+            <li class="centered last">
+                <a href="/category/" class="btn">See All Categories</a>
+            </li>
+        </ul>
+        <?php else: ?>
+        <p>No categories exist.</p>
+        <?php endif; ?>
+    </div>
+    <div class="column">
+        <h3>By Location</h3>
+        <?php if (!empty($this->locations)): ?>
+        <ul>
+            <?php foreach ($this->locations as $location): ?>
+            <li><a href="/jobs/location/<?php echo Clean::uristub($location['location']); ?>"><?php echo $location['location_clean']; ?> (<?php echo number_format($location['total'], 0); ?>)</a></li>
+            <?php endforeach; ?>
+            <li class="centered last">
+                <a href="/location/" class="btn">See All Cities</a>
+            </li>
+        </ul>
+        <?php else: ?>
+        <p>No locations exist.</p>
+        <?php endif; ?>
+    </div>
+</div>

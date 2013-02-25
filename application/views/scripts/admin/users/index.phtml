@@ -1,0 +1,85 @@
+<?php
+$roleMap = array(
+	Users::ROLE_ADMIN => 'Admin',
+	Users::ROLE_GUEST => 'Guest',
+	Users::ROLE_SUPER => 'Super Admin',
+	Users::ROLE_USER => 'Client'
+);
+?>
+
+<div class="block">
+	<div class="block_head">
+		<div class="bheadl"></div>
+		<div class="bheadr"></div>
+
+		<h2>User Management</h2>
+
+		<?php if ($this->isAdmin): ?>
+		<ul>
+			<li><a href="/admin/users/create/" class="btn long">Create New User</a></li>
+		</ul>
+		<?php endif; ?>
+	</div>
+	<!-- .block_head ends -->
+
+	<div class="block_content">
+		<?php echo $this->partial('partials/global/flash-messenger.phtml');?>
+
+		<?php if (!empty($this->users)): ?>
+		<table class="sortable" cellpadding="0" cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Email</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Company</th>
+					<th>Role</th>
+					<th>Last Updated</th>
+					<?php if ($this->isAdmin): ?>
+					<th style="width:200px"></th>
+					<?php endif; ?>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($this->users as $user): ?>
+				<tr>
+						<td><?php echo (int) $user['id']; ?></td>
+						<td><?php echo Clean::xss($user['email']); ?></td>
+						<td><?php echo Clean::xss($user['firstname']); ?></td>
+						<td><?php echo Clean::xss($user['lastname']); ?></td>
+						<td><?php echo Clean::xss($user['company']); ?></td>
+						<td><?php echo $roleMap[(int) $user['role_id']]; ?></td>
+						<td><?php echo date('m.d.Y H:i:s', $user['modified_ts']); ?></td>
+						<?php if ($this->isAdmin): ?>
+						<td class="btns four-btns">
+							<a href="/admin/users/edit/<?php echo (int) $user['id']; ?>" title="Edit User" alt="confirm" class="btn tiny table">edit</a>
+							<?php if ($user['role_id'] == Users::ROLE_USER): ?>
+							<a href="/admin/users/delete/<?php echo (int) $user['id']; ?>" title="Delete User" alt="confirm" class="btn tiny table btnDelete">delete</a>
+							<a href="/admin/settings/theme/<?php echo (int) $user['id']; ?>" title="Edit User Settings" alt="confirm" class="btn tiny table">theme</a>
+							<a href="/admin/settings/api/<?php echo (int) $user['id']; ?>" title="Edit User API Settings" alt="confirm" class="btn tiny nomargin table">api</a>
+							<?php else: ?>
+							<a href="/admin/users/delete/<?php echo (int) $user['id']; ?>" title="Delete User" alt="confirm" class="btn tiny table nomargin btnDelete">delete</a>
+							<?php endif; ?>
+						</td>
+						<?php endif; ?>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php else: ?>
+		<div class="message warning"><p>No users currently exist. Why don't you try creating one?</p></div>
+		<?php endif; ?>
+	</div>
+</div>
+
+<?php $this->placeholder('js')->captureStart(); ?>
+<script type="text/javascript">
+$('.btnDelete').click(function() {
+	if (confirm('Are you sure you would like to delete this user?')) {
+		return true;
+	}
+	return false;
+})
+</script>
+<?php $this->placeholder('js')->captureEnd(); ?>

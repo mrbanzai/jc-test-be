@@ -1,0 +1,160 @@
+<div class="pageWrapper">
+        
+        <div class="header">
+            <a href="http://www.phoenix.edu/" target="blank"><img src="http://seostatic.tmp.com/job-images/3326/UP_logo.jpg" alt="University of Phoenix" /></a>
+
+<ul>
+    <li class="first"><a href="http://www.phoenix.edu/faculty/become-a-faculty-member/doctoral-become-a-faculty-member.html" target="_blank">Become a Doctoral Faculty Member</a></li>
+    <li><a href="http://www.phoenix.edu/faculty/become-a-faculty-member/teach-online-become-faculty-member.html" target="_blank">Become an Online Faculty Member</a></li>
+    <li class="last"><a href="http://www.phoenix.edu/faculty/become-a-faculty-member.html" target="_blank">Become a Campus Faculty Member</a></li>
+</ul>
+        </div><!--/.header-->
+    
+        <div class="wrapper_contents">
+            
+        
+        <div class="banner job">
+                <div class="bannerImg">
+                    <img alt="Chad Snyder, Ph.D., LPC, NCC" src="http://seostatic.tmp.com/job-images/3326/L3header.jpg">
+                    <p><span class="name">Chad Snyder, Ph.D., LPC, NCC</span><br>College of Social Sciences</p>
+                </div>
+                <h3>Teaching at<br>University of Phoenix</h3>
+                <p>Our faculty members must meet rigorous standards. A master’s-level degree or higher is required in addition to practical experience as a working professional in order to teach with us.</p>
+                <p>In addition to teaching positions, we also employ faculty development administrators, campus college chairs and college deans.  And to meet the needs of our students, we employ academic, financial and enrollment advisors, and much more.</p>
+            </div><!--/.banner-->
+
+            <div class="contents">
+            <div id="col-left">
+            <ul>
+<li><a href="/category">Search by Category</a></li>
+<li><a href="/location">Search by Location</a></li>
+<li><a href="/jobs/all">Browse All Jobs </a></li>
+<li><a href="/index">Home </a></li></ul></div></ul></div>
+<div id="col-center">
+ <div class="wrapper content">
+    <div class="leftcolumn">
+        <?php if($this->hasSuccess) echo $this->partial('partials/global/flash-messenger.phtml'); ?>
+        <?php if (!empty($this->job)): ?>
+            <h1 class="left job-title"><?php echo Clean::xss($this->job['name']); ?></h1>
+            <?php if (!empty($this->job['schedule'])): ?>
+            <span class="left schedule"><?php echo Clean::xss($this->job['schedule']); ?></span>
+            <?php endif; ?>
+
+            <?php if (!empty($this->job['location'])): ?>
+            <div class="location"><?php echo Clean::xss($this->job['location']); ?></div>
+            <?php endif; ?>
+
+            <section class="job-details">
+                <?php if (!empty($this->job['description'])): ?>
+                
+                <?php if (!isset($this->job['hide_apply']) || $this->job['hide_apply'] == 0): ?>
+                    <?php $onClick = /*"_gaq.push(['_trackEvent', 'Apply Now top', 'Applies top', '" . Clean::xss($this->job['name']) . (!empty($this->job['location']) ? ', ' . Clean::xss($this->job['location']) : '') . "'])";*/'' ?>
+                    <?php if (isset($this->job['modal_style']) && $this->job['modal_style'] == 'none'): ?>
+                    <a target="_blank" href="<?php echo Clean::xss($this->job['apply_url']); ?>" class="btn apply_now" onClick="<?php echo $onClick; ?>">Apply Now</a>
+                    <?php else: ?>
+                    <a href="#applyNow" class="btn apply_now" rel="facebox" onClick="<?php echo $onClick; ?>">Apply Now</a>
+                    <?php endif; ?>
+                <?php endif; ?>
+             </ br>             
+                <h3 class="heading">Position Summary</h3><div class="description">
+                    <?php
+                    $description = str_replace(
+                        array('&nbsp;', '<DIV></DIV>', '<DIV></SPAN></DIV>', '<div></div>'),
+                        array('', '<br />'),
+                        $this->job['description']
+                    );
+                    $description = str_replace('<br /><br />', '<br />', $description);
+
+                    echo $description;
+
+                    ?>
+                </div>
+                <?php endif; ?>
+
+                <?php if (!empty($this->job['qualifications'])): ?>
+                <h3 class="heading">Qualifications</h3>
+                <div class="qualifications">
+                    <?php
+                    $qualifications = str_replace(
+                        array('&nbsp;', '<DIV></DIV>', '<DIV></SPAN></DIV>', '<div></div>'),
+                        array('', '<br />'),
+                        $this->job['qualifications']
+                    );
+                    $qualifications = str_replace('<br /><br />', '<br />', $qualifications);
+                    echo $qualifications;
+
+                    ?>
+                </div>
+                <?php endif; ?>
+
+                <?php
+                if (!empty($this->job['shift'])
+                    || !empty($this->job['schedule'])
+                    || !empty($this->job['department'])):
+                ?>
+                <ul>
+                    <?php if (!empty($this->job['department'])): ?>
+                  <li><strong>Department:</strong> <?php echo Clean::xss($this->job['department']); ?></li>
+                        <?php endif; ?>
+                        <?php if (!empty($this->job['shift'])): ?>
+                        <li><strong>Shift:</strong> <?php echo Clean::xss($this->job['shift']); ?></li>
+                        <?php endif; ?>
+                        <?php if (!empty($this->job['schedule'])): ?>
+                        <li><strong>Schedule:</strong> <?php echo Clean::xss($this->job['schedule']); ?></li>
+                        <?php endif; ?>
+                    </ul>
+                <?php
+                endif;
+                ?>
+
+
+
+                <?php if (!isset($this->job['hide_apply']) || $this->job['hide_apply'] == 0): ?>
+                    <?php $onClick = /*"_gaq.push(['_trackEvent', 'Apply Now bottom', 'Applies bottom', '" . Clean::xss($this->job['name']) . (!empty($this->job['location']) ? ', ' . Clean::xss($this->job['location']) : '') . "'])"*/''; ?>
+                    <?php if (isset($this->job['modal_style']) && $this->job['modal_style'] == 'none'): ?>
+                    <a target="_blank" href="<?php echo Clean::xss($this->job['apply_url']); ?>" class="btn apply_now" onClick="<?php echo $onClick; ?>">Apply Now</a>
+                    <?php else: ?>
+                    <a href="#applyNow" class="btn apply_now" rel="facebox" onClick="<?php echo $onClick; ?>">Apply Now</a>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+            </section>
+
+        <?php else: ?>
+        <h3 class="heading">This Job No Longer Exists</h3>
+        <p>We're sorry, but it appears as though the job you are looking for
+        no longer exists.</p>
+        <?php endif; ?>
+    </div>
+ </div>
+</div>
+<div id="col-right">  
+<h3>Search our Jobs</h3>
+<form method="post" action="/search/" class="searchbar">
+            <input type="text" name="search" id="q" placeholder="Enter a job title" maxlength="32" />
+            <button type="submit" id="submit" value="search">Go</button>
+            <br />
+</form>
+
+ <div class="box links">
+                    <div class="inbox">
+                    
+<script type="text/javascript">addthis_pub = '';addthis_language='en';</script>
+
+<a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" 
+onmouseout="addthis_close()" onclick="return addthis_sendto()">
+<img src="http://s7.addthis.com/static/btn/lg-share-en.gif" width="125" height="16" border="0" alt="" /></a>
+<script type="text/javascript" src="http://s7.addthis.com/js/152/addthis_widget.js"></script>
+<h3>Useful Links</h3>
+                        <ul><li><a href="http://www.phoenix.edu/about_us/about_university_of_phoenix.html" target="_blank">About Us</a><br /></li><li><a href="http://www.phoenix.edu/campus-locations.html" target="_blank">Campus Locations</a><br /></li><li><a href="http://www.phoenix.edu/faculty/become_a_faculty_member/faculty-faq.html" target="_blank">Faculty FAQ’s</a><br /></li><li><a href="http://www.facultymatters.com/summer12" target="_blank">Faculty Matters magazine</a><br /></li><li><a href="http://facultyjobs-phoenix.com/article/facultyprofiles" target="_blank">Meet the Faculty</a><br /></li></ul>
+                    </div><!--/.inbox-->
+                </div><!--/.box .links--></div>
+</div>
+            
+            
+         
+
+         
+            <div class="clear"></div>
+        </div><!--/.wrapper-->
+    </div>

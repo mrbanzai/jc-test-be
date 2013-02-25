@@ -1,0 +1,77 @@
+<?php
+$roleMap = array(
+	Users::ROLE_ADMIN => 'Admin',
+	Users::ROLE_GUEST => 'Guest',
+	Users::ROLE_SUPER => 'Super Admin',
+	Users::ROLE_USER => 'Client'
+);
+?>
+
+<div class="block">
+	<div class="block_head">
+		<div class="bheadl"></div>
+		<div class="bheadr"></div>
+
+		<h2>Job Applicants</h2>
+
+		<ul>
+			<li><a href="/admin/applicants/export/">Export to CSV</a></li>
+		</ul>
+	</div>
+	<!-- .block_head ends -->
+
+	<div class="block_content">
+		<?php echo $this->partial('partials/global/flash-messenger.phtml');?>
+
+		<?php if (!empty($this->applicants)): ?>
+		<table class="sortable" cellpadding="0" cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th>Applicant ID</th>
+					<th>Job ID</th>
+                    <th>Name</th>
+					<th>Email</th>
+					<th>Current Job Title</th>
+					<th>Applied For</th>
+					<th>Submitted</th>
+					<th style="width:130px">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($this->applicants as $applicant): ?>
+				<tr>
+						<td><?php echo (int) $applicant['id']; ?></td>
+						<td><?php echo (int) $applicant['job_id']; ?></td>
+						<td><?php echo Clean::xss($applicant['name']); ?></td>
+						<td><?php echo Clean::xss($applicant['email']); ?></td>
+						<td><?php echo Clean::xss($applicant['previous_job_title']); ?></td>
+						<td>
+							<?php
+							$url = '/job/details/';
+							if (!empty($applicant['location'])) $url .= Clean::uristub($applicant['location']) . '/';
+							if (!empty($applicant['category'])) $url .= Clean::uristub($applicant['category']) . '/';
+							$url .= Clean::uristub($applicant['uristub']) . '/';
+							?>
+							<a href="<?php echo $url; ?>" target="_blank"><?php echo Clean::xss($applicant['job_name']); ?></a>
+						</td>
+						<td><?php echo date('m.d.Y H:i:s', $applicant['created_ts']); ?></td>
+						<td style="width:130px">
+                            <?php if (!empty($applicant['cover_letter'])): ?>
+                            <a href="#coverletter<?php echo $applicant['id']; ?>" title="View Cover Letter" alt="confirm" class="btn tiny table" rel="facebox">cover letter</a>
+                            <div id="coverletter<?php echo $applicant['id']; ?>" style="display:none">
+                                <?php echo Clean::xss($applicant['cover_letter']); ?>
+                            </div>
+                            <?php endif; ?>
+                            <?php if (!empty($applicant['resume'])): ?>
+                            <a href="<?php echo $applicant['resume']; ?>" title="View Resume" alt="confirm" class="btn tiny table">resume</a>
+                            <?php endif; ?>
+						</td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php else: ?>
+		<div class="message warning"><p>No job applicants currently exist.</p></div>
+		<?php endif; ?>
+	</div>
+</div>

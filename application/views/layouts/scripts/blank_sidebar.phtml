@@ -1,0 +1,75 @@
+<?php echo $this->partial('partials/header.phtml'); ?>
+
+<body id="<?php echo $page_name; ?>-page" class="<?php echo $browser; ?>">
+	<div id="topBar" class="full"></div>
+	<div id="pageHeader" class="container">
+		<div class="column-row">
+
+
+			<!-- HEADER & NAV -->
+			<div class="sixteen columns">
+				<header>
+					<?php echo LayoutItems::logo(); ?>
+					<?php echo LayoutItems::top_nav($this->parties); ?>
+					<?php echo LayoutItems::account(); ?>
+				</header>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- TABS -->
+	<div class="wrapper">
+		<div class="container">
+			<div class="column-row">
+				<div class="eleven columns">
+					<h1 id="pageTitle"><?php echo htmlentities($this->title); ?></h1>
+					<?php if (isset($this->tabs)) echo LayoutItems::tabs($this->tabs, isset($this->currentTab) ? $this->currentTab : 1); ?>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="column-row">
+
+			<!-- TAB CONTENT -->
+			<div id="partyPageContent" class="eleven columns">
+				<div id="partyPageContentDiv">
+
+					<!--Begin placeholder for error and log messages to user-->
+					<?php echo Messager::display(); ?>
+					<!--End placeholder for error and log messages-->
+						
+					<?php if (!empty($this->subtitle)): ?>
+					<h3 class="upper league strike bottom10"><span><?php echo htmlentities($this->subtitle); ?></span></h3>
+					<?php endif; ?>	
+						
+					<?php echo $this->layout()->content ?>
+				</div>
+			</div>
+
+			<?php if (isset($this->sidebar) && $this->sidebar) echo Sidebar::display(false) ?>
+
+		</div><!-- close .column-row -->
+
+
+		<!-- FOOTER -->
+		<div class="column-row">
+			<div class="sixteen columns">
+				<footer>
+					<span id="copyright">&copy; Ruckus</span>
+					<ul id="footerNav">
+						<li><a href="about.php">About</a></li>
+						<li><a href="FAQ.php">FAQ</a></li>
+						<li><a href="contact.php">Contact</a></li>
+					</ul>
+				</footer>
+			</div>
+		</div>
+	</div><!-- close .container -->
+
+<?php echo $this->partial('partials/footer.phtml'); ?>
+
+</body>
+</html>

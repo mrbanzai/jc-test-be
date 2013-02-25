@@ -1,0 +1,10 @@
+public/core*
+public/images/.DS_Store
+application/configs/global.ini
+application/data
+application/data/logs/*
+application/data/search/.empty
+jobParsingErrors.txt
+.settings/*
+.buildpath
+.project

@@ -1,0 +1,71 @@
+<script type="text/javascript" src="/js/jquery.form.js"></script>
+<script type="text/javascript" src="/js/jquery.spinner.js"></script>
+<script type="text/javascript">
+$(function() {
+
+	$('.btn-upload').removeClass('hidden');
+
+	// watch for file uploads
+	$('input.button.upload').change(function() {
+		var $this = $(this);
+		var id = $this.attr('id');
+		var ext = $this.val();
+		ext = ext.substr(ext.lastIndexOf('.') + 1);
+
+		// check for valid extensions
+		var validExt = ['jpg','jpeg','gif','png'];
+		if ($this.attr('rel') !== undefined) {
+			validExt = $this.attr('rel');
+			validExt = validExt.split(',');
+		}
+
+		if ($.inArray(ext, validExt) == -1) {
+			addMessage('notice', 'error', 'The image you are attempting to upload must have an extension of jpg, jpeg, gif, or png.')
+			return false;
+		}
+
+		$profilepic = $('#profile_pic');
+		$profilepic.spinner();
+
+		$('.btn-upload').attr('style', 'display: none !important');
+
+		// if on edit page, submit the form
+		$this.closest('form').ajaxSubmit({
+			type: 'POST',
+			//url: document.location.pathname,
+			//data: { },
+			iframe: true,
+			error: function() {
+				// remove preloader
+				$profilepic.spinner('remove');
+				$('.btn-upload').attr('style', 'display: block !important');
+				
+				// output a friendly message
+				addMessage('notice', 'error', 'An error occurred while attempting to upload your image. Please try again.');
+			},
+			success: function(responseText, statusText, xhr, $form) {
+				// remove preloader
+				$profilepic.spinner('remove');
+				$('.btn-upload').attr('style', 'display: block !important');
+				// handle response
+				if (responseText == 'error') {
+					addMessage('notice', 'error', 'An error occurred while attempting to upload your image. Please try again.');
+				} else {
+					//addMessage('notice', 'success', 'Your image has been updated.');
+					$('#partySidebar .profilePic').attr('src', responseText + '?' + _rand());
+				}
+			}
+
+		});
+	});
+
+});
+
+/**
+ * Generate random string for loading images.
+ */
+function _rand() {
+	ko = new Date();
+	return ko.getTime();
+}
+</script>

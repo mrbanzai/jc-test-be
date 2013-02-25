@@ -1,0 +1,99 @@
+<div id="header">
+    <h1 id="logo">
+        <a href="/">
+            <?php echo !empty($this->theme['logo']) ? '<img src="' . $this->theme['logo'] . '" alt="' . (!empty($this->theme['company']) ? Clean::xss($this->theme['company']) : '') . '" />' : ''; ?>
+            <?php echo !empty($this->theme['company']) ? '<span>' . Clean::xss($this->theme['company']) . '</span>' : '<span>JobCastle</span>'; ?>
+        </a>
+    </h1>
+</div>
+<div id="searchblock" class="clearfix">
+    <div class="wrapper">
+        <form method="post" action="/search/" class="searchbar">
+            <input type="text" name="search" id="q" placeholder="Enter a job title" maxlength="32" />
+            <button type="submit" id="submit" value="search">search</button>
+            <select name="location" id="location" class="chzn" title="Location" style="visibility:hidden">
+                <?php echo $this->dropdownLocations; ?>
+            </select>
+            <select name="category" id="category" class="chzn" title="Category" style="visibility:hidden">
+                <?php echo $this->dropdownCategories; ?>
+            </select>
+        </form>
+    </div>
+</div>
+<div class="wrapper content">
+    <?php if (isset($this->results)): ?>
+    <div class="leftcolumn">
+        <h2><?php echo Clean::deuristub($this->city); ?></h2>
+        <h5>Showing <strong><?php echo count($this->results); ?></strong> matching jobs</h5>
+        <?php if (!empty($this->results)): ?>
+        <ul id="searchresults">
+            <?php
+            $alt = false;
+            foreach ($this->results as $result):
+
+                $result = $result->getDocument();
+                $date_posted = $result->getFieldValue('date_posted');
+                $location = $result->getFieldValue('location');
+                $category = $result->getFieldValue('category');
+                $schedule = $result->getFieldValue('schedule');
+
+                // fix the date
+                $date_posted = (int) trim($date_posted);
+            ?>
+                <li<?php echo $alt ? ' class="alt"' : ''; ?>>
+                    <span class="date"><?php echo !empty($date_posted) ? date('F j Y', $date_posted) : ''; ?></span>
+                    <h3 class="job-title"><?php echo Clean::xss($result->name); ?></h3>
+                    <?php
+                    $url = '/job/details/';
+                    if (!empty($location)) $url .= Clean::uristub($location) . '/';
+                    if (!empty($category)) $url .= Clean::uristub($category) . '/';
+                    $url .= Clean::uristub($result->uristub) . '/';
+                    ?>
+                    <a href="<?php echo $url; ?>" class="right">View Details</a>
+                    <?php if (!empty($schedule)): ?>
+                    <span class="schedule"><?php echo Clean::xss($schedule); ?></span>
+                    <?php endif; ?>
+
+                    <?php if (!empty($location)): ?>
+                    <span class="location"><?php echo Clean::xss($location); ?></span>
+                    <?php endif; ?>
+                </li>
+                <?php $alt = !$alt; ?>
+            <?php endforeach; ?>
+        </ul>
+        <?php else: ?>
+        <p>No jobs currently exist for the specified location.</p>
+        <?php endif; ?>
+    </div>
+    <?php else: ?>
+        <div class="leftcolumn">
+        <?php if (!empty($this->cities)): ?>
+            <h2>Job Cities</h2>
+            <ul class="alternating">
+                <?php $alt = false; ?>
+                <?php foreach ($this->cities as $city): ?>
+                <li<?php echo $alt ? ' class="alt"' : ''; ?>>
+                    <?php $url = '/jobs/city/' . Clean::uristub($city['city']) . '/'; ?>
+                    <a href="<?php echo $url; ?>"><?php echo Clean::xss($city['city']); ?></a>
+                </li>
+                <?php $alt = !$alt; ?>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <h3>No cities currently exist</h3>
+            <p>It does not appear as though any jobs currently exist.</p>
+        <?php endif; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (!empty($this->categories)): ?>
+    <div class="rightcolumn">
+        <h4>Popular Job Categories</h4>
+        <ul>
+            <?php foreach ($this->categories as $category): ?>
+            <?php $url = '/jobs/' . Clean::uristub($category['category']) . '/'; ?>
+            <li><a href="<?php echo $url; ?>"><?php echo Clean::xss($category['category']); ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php endif; ?>
+</div>

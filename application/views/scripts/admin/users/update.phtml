@@ -1,0 +1,230 @@
+<div class="block">
+    <div class="block_head">
+        <div class="bheadl"></div>
+        <div class="bheadr"></div>
+        <h2><?php echo (!empty($this->edit)) ? 'Edit' : 'Create a New'; ?> User</h2>
+    </div>
+    <div class="block_content">
+        <p class="breadcrumb">
+            <a href="/admin/">Admin</a> &raquo;
+            <?php if ($this->isAdmin): ?>
+            <a href="/admin/users/">Users</a> &raquo;
+            <strong><?php echo (!empty($this->edit)) ? 'Edit' : 'Create a New'; ?> User</strong>
+            <?php else: ?>
+            <strong>Edit User</strong>
+            <?php endif; ?>
+        </p>
+
+        <?php
+        $message = (!empty($this->edit)) ?
+            'You can update user information by modifying the fields below.' :
+            'Create a new user/client by entering details in the fields below.';
+        echo $this->partial(
+            'partials/global/flash-messenger.phtml',
+            array('message' => '<div class="message info"><p>' . $message . '</p></div>')
+        );
+        ?>
+
+        <form action="/admin/users/<?php echo (!empty($this->edit)) ? 'edit' : 'create'; ?>/<?php echo !empty($this->userinfo['id']) ? (int) $this->userinfo['id'] : ''; ?>" method="post" name="updateJob" id="updateUser">
+            <p>
+                <label for="firstname">First Name*:</label><br />
+                <input type="text" class="text small" name="firstname" id="firstname" value="<?php echo !empty($this->userinfo['firstname']) ? Clean::xss($this->userinfo['firstname']) : ''; ?>" />
+            </p>
+            <p>
+                <label for="lastname">Last Name*:</label><br />
+                <input type="text" class="text small" name="lastname" id="lastname" value="<?php echo !empty($this->userinfo['lastname']) ? Clean::xss($this->userinfo['lastname']) : ''; ?>" />
+            </p>
+            <p>
+                <label for="company">Company:</label><br />
+                <input type="text" class="text small" name="company" id="company" value="<?php echo !empty($this->userinfo['company']) ? Clean::xss($this->userinfo['company']) : ''; ?>" />
+            </p>
+            <p>
+                <label for="email">Email Address*:</label><br />
+                <input type="text" class="text small" name="email" id="email" value="<?php echo !empty($this->userinfo['email']) ? Clean::xss($this->userinfo['email']) : ''; ?>" />
+            </p>
+            <p>
+                <label for="password">Password*:</label><br />
+                <input type="password" class="text small" name="password" id="password" />
+            </p>
+            <p>
+                <label for="password2">Confirm Password*:</label><br />
+                <input type="password" class="text small" name="password2" id="password2" />
+            </p>
+            <?php if ($this->canChangeRole && !empty($this->allowableRoles)
+                      && (!isset($this->userinfo['role']) || isset($this->allowableRoles[$this->userinfo['role']]))): ?>
+            <p>
+                <label for="role">User Role:</label><br />
+                <select name="role" id="role" class="styled">
+                    <?php foreach ($this->allowableRoles as $role_id => $role_name): ?>
+                    <option value="<?php echo (int) $role_id; ?>" <?php echo (isset($this->userinfo['role']) && $this->userinfo['role'] == $role_id) ? 'selected="selected"' : ''; ?>"><?php echo Clean::xss($role_name); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <span class="note">Generally you will want to select "Client" unless creating a new administrative account to help manage clients.</span>
+            </p>
+            <?php endif; ?>
+            <div id="dynamic_phone_tracking_container">
+                <p>
+                    <label for="dynamic_phone_tracking">Dynamic Phone Tracking Code:</label><br />
+                    <textarea name="dynamic_phone_tracking" id="dynamic_phone_tracking"><?php echo !empty($this->userinfo['dynamic_phone_tracking']) ? htmlentities($this->userinfo['dynamic_phone_tracking']) : ''; ?></textarea>
+                    <span class="note">Enter the javascript code provided for dynamic phone number insertion.</span>
+                </p>
+                <p>
+                    <label for="default_phone">Default Phone Number:</label><br />
+                    <input type="text" class="text small" name="default_phone" id="default_phone" maxlength="20" value="<?php echo !empty($this->userinfo['default_phone']) ? Clean::xss($this->userinfo['default_phone']) : ''; ?>" />
+                    <span class="note">Default phone number to display when using dynamic number insertion.</span>
+                </p>
+            </div>
+            <?php if ($this->isAdmin): ?>
+            <div id="ats_container"<?php echo (isset($this->userinfo['role']) && $this->userinfo['role'] != 2) ? ' class="hidden"' : ''; ?>>
+                <div class="message info">
+                    <p>
+                    As an administrator, you may modify the client's ATS information
+                    below. The ATS information is used for scraping pertinent job data.
+                    </p>
+                </div>
+                <p>
+                    <label for="subdomain">Subdomain*:</label><br />
+                    <?php if ($this->useDefaultSubdomain): ?>
+                    <input type="text" class="text small" name="subdomain" id="subdomain" readonly="readonly" maxlength="20" value="default" />
+                    <?php else: ?>
+                    <input type="text" class="text small" name="subdomain" id="subdomain" maxlength="20" value="<?php echo !empty($this->userinfo['subdomain']) ? Clean::xss($this->userinfo['subdomain']) : ''; ?>" />
+                    <?php endif; ?>
+                    <span class="note">
+                        <?php if ($this->useDefaultSubdomain): ?>
+                        <span style="color:#600">
+                            Usage of the default subdomain is enabled. This means this
+                            installation is dedicated to a single client. You may not change
+                            this value. You also should not create other clients as
+                            they will interfere with one another.
+                        </span>
+                        <?php else: ?>
+                        The subdomain portion of <strong><?php echo !empty($this->host) ? $this->host : 'this website'; ?></strong>
+                        that you would like to assign to the client as their dedicated URL.
+                        This is the URL that will be used to view and apply to the client's
+                        jobs from this domain. <em>20 character max</em>.
+                        <?php endif; ?>
+                    </span>
+                </p>
+                <?php if (!$this->useDefaultSubdomain): ?>
+                <p>
+                    <label for="cname">CNAME Host:</label><br />
+                    <input type="text" class="text small" name="cname" id="cname" maxlength="120" value="<?php echo !empty($this->userinfo['cname']) ? Clean::xss($this->userinfo['cname']) : ''; ?>" />
+                    <span class="note">
+                    This entry is to be used when the client wishes to use a
+                    subdomain on their existing site (i.e. <strong>jobs.mycompany.com</strong>)
+                    to point to this site, hiding this domain and URL from interested
+                    job applicants and viewers. You may enter either a fully qualified
+                    domain name (FQDN) or a subdomain here. Do not use a leading http://
+                    or https://. If you are using this method with the client, you
+                    must instruct them to create a CNAME DNS record which points
+                    the CNAME host entered above to the subdomain entered above.
+                    <em>120 character max</em>.
+                    </span>
+                </p>
+                <?php endif; ?>
+                <p>
+                    <label for="name">ATS Name:</label><br />
+                    <input type="text" class="text small" name="name" id="name" value="<?php echo !empty($this->ats['name']) ? Clean::xss($this->ats['name']) : ''; ?>" />
+                    <span class="note">The name of the feed or client, for your personal reference only.</span>
+                </p>
+                <p>
+                    <label for="url">ATS Feed URL:</label><br />
+                    <input type="text" class="text small" name="url" id="url" value="<?php echo !empty($this->ats['url']) ? Clean::xss($this->ats['url']) : ''; ?>" />
+                    <span class="note">A feed url is the top level url of the particular ATS for finding or listing all jobs.</span>
+                </p>
+                <p>
+                    <label for="ats_type_id">ATS Type:</label><br />
+                    <select name="ats_type_id" id="ats_type_id" class="styled">
+                        <option value=""></option>
+                        <?php foreach ($this->atsTypes as $type_id => $type_name): ?>
+                        <option value="<?php echo (int) $type_id; ?>" <?php echo (!empty($this->ats['feed_type_id']) && $this->ats['feed_type_id'] == $type_id) ? 'selected="selected"' : ''; ?>><?php echo Clean::xss($type_name); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </p>
+                   <p>
+                    <label for="ats_default_modal_style">ATS Default Modal Style:</label><br />
+                    <select name="ats_default_modal_style" class="styled">
+                <?php foreach ($this->modalStyles as $modal_style): ?>
+                <option value="<?php echo Clean::xss($modal_style); ?>" <?php echo (!empty($this->ats['default_modal_style']) && $this->ats['default_modal_style'] == $modal_style) ? 'selected="selected"' : ''; ?>><?php echo Clean::xss($modal_style); ?></option>
+                <?php endforeach; ?>
+            </select>
+            <label for="ats_override_now">Override Now?</label>
+            <input type="checkbox" name="ats_override_now" id="ats_override_now" value="true"/>
+                </p>
+            </div>
+            <?php endif; ?>
+
+            <p>
+                <input type="hidden" name="id" id="id" value="<?php echo !empty($this->userinfo['id']) ? (int) $this->userinfo['id'] : ''; ?>" />
+                <input class="submit small" type="submit" value="Submit">
+            </p>
+        </form>
+    </div>
+</div>
+
+<script id="feedTableRowTemplate" type="text/x-jquery-tmpl">
+    <tr class="feed" data-index="${index}">
+        <td>
+            <input type="text" class="text small inline" name="ats[${index}][name]" value="${name}" style="width: 300px;" />
+        </td>
+        <td>
+            <input type="text" class="text small inline" name="ats[${index}][url]" value="${url}" />
+        </td>
+        <td>
+            <select name="ats[${index}][feed_type_id]" class="inline">
+                <option value=""></option>
+                <?php foreach ($this->atsTypes as $type_id => $type_name): ?>
+                <option value="<?php echo (int) $type_id; ?>" {{if feed_type_id == <?php echo $type_id; ?>}}selected="selected"{{/if}}><?php echo Clean::xss($type_name); ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td>
+        <td>
+            <select name="ats[${index}][default_modal_style]" class="inline">
+                <?php foreach ($this->modalStyles as $modal_style): ?>
+                <option value="<?php echo Clean::xss($modal_style); ?>" {{if modal_style == <?php echo $modal_style; ?>}}selected="selected"{{/if}}><?php echo Clean::xss($modal_style); ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td>
+        <td>
+            <a href="#" title="Delete" alt="confirm" data-index="${index}" class="btn tiny table nomargin btnDelete">delete</a>
+        </td>
+    </tr>
+</script>
+
+<?php $this->placeholder('js')->captureStart(); ?>
+<script type="text/javascript">
+    var $feedTableRowTemplate = $('#feedTableRowTemplate'),
+        $atsFeedsTable = $('#ats_feeds_table');
+
+    $('#role').change(function() {
+        if ($(this).val() == 2) {
+            $('#ats_container, #dynamic_phone_tracking_container').removeClass('hidden');
+        } else {
+            $('#ats_container, #dynamic_phone_tracking_container').addClass('hidden');
+        }
+    });
+    $atsFeedsTable.delegate('.btnAdd', 'click', function (e) {
+        var $lastFeed = $atsFeedsTable.find('tr.feed').last(),
+            nextIndex = (typeof $lastFeed == 'undefined' ? 0 : ($lastFeed.data('index') + 1)),
+            $newRow = $feedTableRowTemplate.tmpl({ name: '', url: '', index: nextIndex, feed_type_id: null });
+
+        $('.no_ats', $atsFeedsTable).hide();
+        console.log($lastFeed);
+        if ($lastFeed.length) {
+            $newRow.insertAfter($lastFeed);
+        } else {
+            $('tbody', $atsFeedsTable).append($newRow);
+        }
+        e.preventDefault(); e.stopPropagation(); return false;
+    });
+    $atsFeedsTable.delegate('.btnDelete', 'click', function (e) {
+        var index = $(this).data('index');
+        if (typeof index !== 'undefined') {
+            $atsFeedsTable.find('tr.feed[data-index="' + index + '"]').remove();
+            if (!$atsFeedsTable.find('tr.feed').length)
+                $('.no_ats', $atsFeedsTable).show();
+        }
+        e.preventDefault(); e.stopPropagation(); return false;
+    });
+</script>
+<?php $this->placeholder('js')->captureEnd(); ?>

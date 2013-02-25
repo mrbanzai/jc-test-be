@@ -1,0 +1,5 @@
+<script type="text/javascript" src="/public/js/jquery.errorhandler.js"></script>
+<script type="text/javascript">
+var formErr = <?php echo (isset($errors) && is_array($errors)) ? json_encode($errors) : '{}';
+$.errorHandler(formErr);
+</script>

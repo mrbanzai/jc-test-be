@@ -1,0 +1,95 @@
+<div class="header_boxes">
+<div class="searchbox_header" id="category_home">
+<h3><a href="/category">Search Jobs by Category</a></h3>
+</div>
+<div class="column">
+
+        <?php if (!empty($this->categories)): ?>
+        <ul>
+            <?php foreach ($this->categories as $category): ?>
+            <?php $underscoreCat = str_replace("%2F", "_", urlencode($category['category'])); ?>
+            <li><a href="/jobs/<?php echo $underscoreCat; ?>"><?php echo Clean::xss($category['category']); ?> (<?php echo number_format($category['count'], 0); ?>)</a></li>
+            <?php endforeach; ?>
+            <li class="centered last">
+                <a href="/category/" class="btn">View All Job Categories</a>
+            </li>
+        </ul>
+        <?php else: ?>
+        <p>No categories exist.</p>
+        <?php endif; ?>
+</div>
+        </div>
+
+    <div class="header_boxes_location"><div class="searchbox_header" id="location_home">
+<h3><a href="/location">Search Jobs by Location</a></h3>
+</div>
+   <div class="column">
+
+        <?php if (!empty($this->locations)): ?>
+        <ul>
+            <?php foreach ($this->locations as $location): ?>
+            <li><a href="/jobs/location/<?php echo urlencode($location['location']); ?>"><?php echo $location['location']; ?> (<?php echo number_format($location['count'], 0); ?>)</a></li>
+            <?php endforeach; ?>
+            <li class="centered last">
+                <a href="/location/" class="btn">View All Job Locations</a>
+            </li>
+        </ul>
+        <?php else: ?>
+        <p>No locations exist.</p>
+        <?php endif; ?>
+  </div>
+  </div>
+  <div class="header_boxes_listings">
+  <div class="searchbox_header" id="listings_home">
+<h3><a href="/jobs/all">Search All Apollo Jobs</a></h3>
+</div>
+  <div class="column">
+        <?php if (!empty($this->recent)): ?>
+        <ul>
+            <?php foreach ($this->recent as $recent): ?>
+            <?php
+            $url = '/job/details/';
+            if (!empty($recent['location'])) $url .= Clean::uristub($recent['location']) . '/';
+            if (!empty($recent['category'])) $url .= Clean::uristub($recent['category']) . '/';
+            $url .= Clean::uristub($recent['uristub']) . '/';
+$name = Clean::xss($recent['name']);
+if( strlen( $name ) > 40 )
+  $name = substr( $name, 0, 40 ) . "...";
+            ?>
+          <li><a href="<?php echo $url; ?>"><?php echo $name; ?></a></li>
+            <?php endforeach; ?>
+            <li class="centered last">
+                <a href="/jobs/all" class="btn">See All Job Listings</a>
+            </li>
+        </ul>
+        <?php else: ?>
+        <p>No recent listings exist.</p>
+        <?php endif; ?></div>
+        </div>
+<div style="clear:both"></div>
+<div id="home_col_left">
+  <p>
+    <span style="font-size:18px; font-weight:bold; margin-bottom:5px;">About Us</span><br />
+    Apollo Group, Inc. was founded in 1973 in response to a gradual shift in higher education demographics from a student
+    population dominated by youth to one in which approximately half the students are adults and over 80 percent of whom work full-time.
+  </p>
+  <p>
+    Apollo's founder, John Sperling, believed -- and events proved him right -- that lifelong employment with a single employer would be replaced by lifelong learning and employment with a variety of employers. Lifelong learning requires an institution dedicated solely to the education of working adults.
+  </p>
+  <p>
+    Today, Apollo Group, Inc., through its subsidiaries, University of Phoenix, Apollo Global, College for Financial Planning, and Institute for Professional Development, has established itself as a leading provider of higher education programs for working adults by focusing on servicing the needs of the working adult.
+  </p>
+</div>
+<div id="home_col_right">
+  <p>
+    <span style="font-size:18px; font-weight:bold; margin-bottom:5px;">Employer of Choice</span><br />
+    Every day, the people of Apollo Group work hard to earn the label &quot;Employer of Choice.&quot; But what exactly does that mean?
+  </p>
+  <ul>
+    <li>An atmosphere that's founded on fairness and respect</li>
+    <li>A culture that thrives on commitment, enthusiasm, passion, and employee engagement</li>
+    <li>An environment that embraces innovative ideas and people from diverse backgrounds</li>
+    <li>A dynamic workplace that offers opportunities to enjoy your everyday opportunities while growing personally and professionally over the long term.</li>
+  </ul>
+  <br />In essence, being an Employer of Choice can mean something unique for each of us.
+</div>

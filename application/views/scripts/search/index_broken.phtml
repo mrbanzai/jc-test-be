@@ -1,0 +1,91 @@
+<div class="pageWrapper">
+        
+      <div class="header">
+          <a href="http://www.phoenix.edu/" target="blank"><img src="http://seostatic.tmp.com/job-images/3326/UP_logo.jpg" alt="University of Phoenix" /></a>
+
+<ul>
+    <li class="first"><a href="http://www.phoenix.edu/faculty/become-a-faculty-member/doctoral-become-a-faculty-member.html" target="_blank">Become a Doctoral Faculty Member</a></li>
+    <li><a href="http://www.phoenix.edu/faculty/become-a-faculty-member/teach-online-become-faculty-member.html" target="_blank">Become an Online Faculty Member</a></li>
+    <li class="last"><a href="http://www.phoenix.edu/faculty/become-a-faculty-member.html" target="_blank">Become a Campus Faculty Member</a></li>
+</ul>
+      </div><!--/.header-->
+    
+  <div class="banner">
+        <div class="bannerImg">
+            <img src="http://seostatic.tmp.com/job-images/3326/L1header.jpg" alt="Ellis Jones, M.A."/>
+            <p><span class="name">Ellis Jones, M.A.</span><br />School of Business</p>
+        </div>
+        <h3>Have your job<br />and teach it too.</h3>
+        <h4>Does this sound like you?</h4>
+        <p>You're an expert in your field with years of real-world experience you'd love to share with eager learners. You'd be a terrific instructor at the college level, but you're thriving in your present career and don't want to leave. Well, you're in luck.</p>
+<p>At University of Phoenix, our flexible class schedules mean you can teach for us part-time without interrupting your full-time career.</p>
+</div><!--/.banner-->
+
+  <div class="contents">
+    <div id="col-left">
+      <ul>
+<li><a href="/category">Search by Category</a></li>
+<li><a href="/location">Search by Location</a></li>
+<li><a href="/jobs/all">Browse All Jobs </a></li>
+<li><a href="/index">Home </a></li></ul></div></ul></div>
+<div id="col-center">
+  <h2>Recent Job Listings</h2>
+      <?php if (!empty($this->recent)): ?>
+      <ul>
+        <?php foreach ($this->recent as $recent): ?>
+        <?php
+            $url = '/job/details/';
+            if (!empty($recent['location'])) $url .= Clean::uristub($recent['location']) . '/';
+            if (!empty($recent['category'])) $url .= Clean::uristub($recent['category']) . '/';
+            $url .= Clean::uristub($recent['uristub']) . '/';
+$descr = $recent["description"];
+if( strlen( $descr ) > 300 )
+  $descr = substr( $descr, 0, 300 ) . "...";
+
+
+$descr = str_replace( "ﾥ", "<br>-", $descr );
+
+            ?>
+        <li><a href="<?php echo $url; ?>"><?php echo Clean::xss($recent['name']); ?></a>
+<p class='jobdescription'>
+	      <?php echo $descr; ?>
+<a href="<?php echo $url; ?>">View full job posting</a></p>
+</li>
+        <?php endforeach; ?>
+        <li>
+            <a href="/jobs/all" class="btn">See All Jobs</a>
+        </li>
+      </ul>
+      <?php else: ?>
+      <p>No recent listings exist.</p>
+<?php endif; ?></div><div id="col-right">  
+<h3>Search our Jobs</h3>
+<form method="post" action="/search/" class="searchbar">
+        <input type="text" name="search" id="q" placeholder="Enter a job title" maxlength="32" />
+        <button type="submit" id="submit" value="search">search</button>
+        <br />
+</form>
+
+ <div class="box links">
+                <div class="inbox">
+                    
+<script type="text/javascript">addthis_pub = '';addthis_language='en';</script>
+
+<a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" 
+onmouseout="addthis_close()" onclick="return addthis_sendto()">
+<img src="http://s7.addthis.com/static/btn/lg-share-en.gif" width="125" height="16" border="0" alt="" /></a>
+<script type="text/javascript" src="http://s7.addthis.com/js/152/addthis_widget.js"></script>
+<h3>Useful Links</h3>
+                    <ul><li><a href="http://www.phoenix.edu/about_us/about_university_of_phoenix.html" target="_blank">About Us</a><br /></li><li><a href="http://www.phoenix.edu/campus-locations.html" target="_blank">Campus Locations</a><br /></li><li><a href="http://www.phoenix.edu/faculty/become_a_faculty_member/faculty-faq.html" target="_blank">Faculty FAQ’s</a><br /></li><li><a href="http://www.facultymatters.com/summer12" target="_blank">Faculty Matters magazine</a><br /></li><li><a href="http://facultyjobs-phoenix.com/article/facultyprofiles" target="_blank">Meet the Faculty</a><br /></li></ul>
+                </div><!--/.inbox-->
+            </div><!--/.box .links--></div>
+</div>
+            
+            
+            
+            
+          </div><!--/.contents-->
+
+         
+          <div class="clear"></div>
+          

@@ -1,0 +1,1782 @@
+<html>
+<head>
+    <title>JobCastle - API Documentation</title>
+    <style type="text/css">
+    body { background: #fff; font-size: 14px; line-height: 18px; font-family: Verdana, Arial, sans-serif; }
+    p { margin: 0 0 20px; }
+    h1, h2, h3, h4, h5, h6 { vertical-align: bottom; }
+    h1 { font-size: 32px; line-height: 36px; }
+    h2 { background: #000; font-weight: normal; color: #f0f0f0; padding: 8px 10px; font-size: 26px; line-height: 30px; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+    h3 { font-size: 22px; line-height: 26px; }
+    h4 { font-size: 18px; line-height: 22px; }
+    h3, h4, h5, h6 { color: #555; }
+
+    a { color: #04c; text-decoration: none; }
+    a:hover { color: #002061; }
+    table { border: 1px solid #ccc; border-collapse: collapse; font-size: 12px; line-height: 16px; margin-bottom: 20px; }
+    table th { background: #ddd; text-align: center; font-weight: bold; }
+    table th, table td { border: 1px solid #ccc; border-collapse: collapse; text-align: left; vertical-align: top; padding: 4px; }
+    table td.small { font-size: 10px; }
+    table tr.no-sideborder td { border-left: none; border-top: none; }
+    code { font-size: 12px; line-height: 16px; font-family: Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace; background: #f0f0f0; border: 1px solid #999; padding: 1px 2px; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+    code.param { background: none; border: none; padding: 0; border-radius: 0; -moz-border-radius: 0; -webkit-border-radius: 0; }
+    pre { margin: 0; padding: 0; }
+    pre code { display: block; padding: 4px; }
+    h3 code { font-size: 18px; line-height: 24px; padding: 2px 4px; background: #444; color: #fff; border-color: #000; }
+    h3 .btn { font-size: 14px; font-weight: normal; font-variant: small-caps; line-height: 24px; padding: 2px 4px; background: #666; color: #fff; text-decoration: none; border: 1px solid #000; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+    h3 .btn:hover { background: #555; }
+
+    .sample-response { display: none; }
+
+    .success { background: #459945; color: #fff; padding: 4px; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+    .error { background: #994545; color: #fff; padding: 4px; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+    table ul, table ol { margin: 4px 0; padding: 0 0 0 20px; }
+    ul li, ol li { vertical-align: middle; }
+    .centered, .centered td { text-align: center; }
+    .important { font-size: 10px; line-height: 16px; font-weight: bold; color: #300; }
+
+    #toTop {
+        border: 1px solid #04c;
+        background: #f7f7f7;
+        text-align: center;
+        padding: 2px 4px;
+        position:fixed; /* this is the magic */
+        bottom:10px; /* together with this to put the div at the bottom*/
+        right:10px;
+        cursor:pointer;
+        display:none;
+        font-family:verdana;
+        font-size:10px;
+        border-radius: 3px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+    }
+
+    #toTop:hover {
+        border-color: #002061;
+    }
+    </style>
+</head>
+<body>
+    <h2>Table of Contents</h2>
+    <ol>
+        <li><a href="#authentication-and-security">Authentication and Security</a></li>
+        <li><a href="#summary">Summary of Endpoints</a></li>
+        <li><a href="#endpoint-request-params">Endpoint Request Parameters</a></li>
+        <li><a href="#sample-requests">Sample Requests (and Responses)</a></li>
+        <li><a href="#error-codes">Error Codes and Handling</a></li>
+        <li><a href="#changelog">Documentation Change Log</a></li>
+    </ol>
+
+    <h2 id="authentication-and-security">Authentication and Security</h2>
+    <p>
+        JobCastle uses HMAC (Hash-based Message Authentication Code) to simultaneously
+        verify both the data integrity and the authenticity of incoming client
+        requests. You can read up on HMAC from <a href="http://en.wikipedia.org/wiki/HMAC" target="_blank">this Wikipedia article</a>.
+        Specifically, we use HMAC-SHA1. The mechanism for authenticating with
+        server entails "digitally signing" each of your requests to the API with
+        your provided public and private key. We also lock down incoming requests
+        based on the HTTP referrer, ensuring requests are only coming from a
+        valid client domain (configurable in the admin).
+    </p>
+
+    <p>
+        We offer example client libraries written in both PHP and JavaScript.
+    </p>
+
+    <h2 id="summary">Summary of Endpoints</h2>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Endpoint</th>
+                <th>Description</th>
+                <th>GET</th>
+                <th>POST</th>
+                <th>PUT</th>
+                <th>DELETE</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>/states/</code></td>
+                <td>Retrieval of all states with available jobs.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#states">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/states/count/</code></td>
+                <td>Retrieval of the total number of states with available jobs.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#states-count">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/cities/</code></td>
+                <td>Retrieval of all cities with available jobs.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#cities">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/cities/count/</code></td>
+                <td>Retrieval of the total number of cities with available jobs.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#cities-count">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/categories/</code></td>
+                <td>Retrieval of all categories with available jobs.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#categories">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/categories/count/</code></td>
+                <td>Retrieval of the total number of categories with available jobs.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#categories-count">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/schedules/</code></td>
+                <td>Retrieval of all job schedules with available jobs.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#schedules">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/schedules/count/</code></td>
+                <td>Retrieval of the total number of job schedules with available jobs.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#schedules-count">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/jobs/</code></td>
+                <td>Retrieval of all jobs, including full details.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#jobs">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/jobs/id/</code></td>
+                <td>Retrieval of details for a specific job by id.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#jobs-id">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/jobs/uristub/</code></td>
+                <td>Retrieval of details for a specific job by uristub.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#jobs-uristub">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/jobs/count/</code></td>
+                <td>Retrieval of a count of all jobs matching a distinct set of criteria.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#jobs-count">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/jobs/titles/</code></td>
+                <td>Retrieval of all job titles.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#jobs-titles">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/jobs/radius/</code></td>
+                <td>Retrieval of all jobs within a given radius of a zipcode.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#jobs-radius">view parameters</a></td>
+            </tr>
+            <tr>
+                <td><code>/jobs/search/</code></td>
+                <td>Retrieval of all jobs matching a distinct set of criteria.</td>
+                <td class="centered">X</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="#jobs-search">view parameters</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="endpoint-request-params">Endpoint Request Parameters</h2>
+
+    <!-- STATES -->
+    <h3 id="states"><code>/states/</code></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">page</code></td>
+                <td>No</td>
+                <td>Current page to request, if necessary.</td>
+                <td class="small">integer <em>(default <strong>0</strong>)</em></td>
+            </tr>
+            <tr>
+                <td><code class="param">perPage</code></td>
+                <td>No</td>
+                <td>Items to return per page for pagination purposes.</td>
+                <td class="small">
+                    integer
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>10 <em><small>(default)</small></em></li>
+                        <li>25</li>
+                        <li>50</li>
+                        <li>100</li>
+                        <li>250</li>
+                        <li>500</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">orderBy</code></td>
+                <td>No</td>
+                <td>Whether to return states ordered by <code class="param">state</code> or <code class="param">count</code>.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>state <em><small>(default)</small></em></li>
+                        <li>count</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">sortOrder</code></td>
+                <td>No</td>
+                <td>Whether to return states in ascending or descending order.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>ASC <em><small>(default)</small></em></li>
+                        <li>DESC</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- STATES COUNT -->
+    <h3 id="states-count"><code>/states/count/</code></h3>
+    <p><em>No parameters exist for this endpoint.</em></p>
+
+    <!-- CITIES -->
+    <h3 id="cities"><code>/cities/</code></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">states</code></td>
+                <td>No</td>
+                <td>A filter for selecting cities within a given state or states.</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of two digit state codes or full state names.
+                    You may receive varying results depending on how the states were retrieved from the feed. Generally,
+                    two digit state codes are preferred.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">page</code></td>
+                <td>No</td>
+                <td>Current page to request, if necessary.</td>
+                <td class="small">integer <em>(default <strong>0</strong>)</em></td>
+            </tr>
+            <tr>
+                <td><code class="param">perPage</code></td>
+                <td>No</td>
+                <td>Items to return per page for pagination purposes.</td>
+                <td class="small">
+                    integer
+                     <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>10 <em><small>(default)</small></em></li>
+                        <li>25</li>
+                        <li>50</li>
+                        <li>100</li>
+                        <li>250</li>
+                        <li>500</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">orderBy</code></td>
+                <td>No</td>
+                <td>Whether to return cities ordered by <code class="param">city</code> or <code class="param">count</code>.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>city <em><small>(default)</small></em></li>
+                        <li>count</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">sortOrder</code></td>
+                <td>No</td>
+                <td>Whether to return cities in ascending or descending order.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>ASC <em><small>(default)</small></em></li>
+                        <li>DESC</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- CITIES COUNT -->
+    <h3 id="cities-count"><code>/cities/count/</code></h3>
+    <p><em>No parameters exist for this endpoint.</em></p>
+
+    <!-- CATEGORIES -->
+    <h3 id="categories"><code>/categories/</code></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">page</code></td>
+                <td>No</td>
+                <td>Current page to request, if necessary.</td>
+                <td class="small">integer <em>(default <strong>0</strong>)</em></td>
+            </tr>
+            <tr>
+                <td><code class="param">perPage</code></td>
+                <td>No</td>
+                <td>Items to return per page for pagination purposes.</td>
+                <td class="small">
+                    integer
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>10 <em><small>(default)</small></em></li>
+                        <li>25</li>
+                        <li>50</li>
+                        <li>100</li>
+                        <li>250</li>
+                        <li>500</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">orderBy</code></td>
+                <td>No</td>
+                <td>Whether to return categories ordered by <code class="param">category</code> or <code class="param">count</code>.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>category <em><small>(default)</small></em></li>
+                        <li>count</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">sortOrder</code></td>
+                <td>No</td>
+                <td>Whether to return cities in ascending or descending order.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>ASC <em><small>(default)</small></em></li>
+                        <li>DESC</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- CATEGORIES COUNT -->
+    <h3 id="categories-count"><code>/categories/count/</code></h3>
+    <p><em>No parameters exist for this endpoint.</em></p>
+
+    <!-- SCHEDULES -->
+    <h3 id="schedules"><code>/schedules/</code></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">page</code></td>
+                <td>No</td>
+                <td>Current page to request, if necessary.</td>
+                <td class="small">integer <em>(default <strong>0</strong>)</em></td>
+            </tr>
+            <tr>
+                <td><code class="param">perPage</code></td>
+                <td>No</td>
+                <td>Items to return per page for pagination purposes.</td>
+                <td class="small">
+                    integer
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>10 <em><small>(default)</small></em></li>
+                        <li>25</li>
+                        <li>50</li>
+                        <li>100</li>
+                        <li>250</li>
+                        <li>500</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">orderBy</code></td>
+                <td>No</td>
+                <td>Whether to return schedules ordered by <code class="param">schedule</code> or <code class="param">count</code>.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>schedule <em><small>(default)</small></em></li>
+                        <li>count</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">sortOrder</code></td>
+                <td>No</td>
+                <td>Whether to return schedules in ascending or descending order.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>ASC <em><small>(default)</small></em></li>
+                        <li>DESC</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- SCHEDULES COUNT -->
+    <h3 id="schedules-count"><code>/schedules/count/</code></h3>
+    <p><em>No parameters exist for this endpoint.</em></p>
+
+    <!-- JOBS -->
+    <h3 id="jobs"><code>/jobs/</code></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5"><code>/jobs/</code></td>
+            </tr>
+            <tr>
+                <td><code class="param">page</code></td>
+                <td>No</td>
+                <td>Current page to request, if necessary.</td>
+                <td class="small">integer <em>(default <strong>0</strong>)</em></td>
+            </tr>
+            <tr>
+                <td><code class="param">perPage</code></td>
+                <td>No</td>
+                <td>Items to return per page for pagination purposes.</td>
+                <td class="small">
+                    integer
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>10 <em><small>(default)</small></em></li>
+                        <li>25</li>
+                        <li>50</li>
+                        <li>100</li>
+                        <li>250</li>
+                        <li>500</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">orderBy</code></td>
+                <td>No</td>
+                <td>Returned results will be ordered based on this parameter.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>title <em><small>(default)</small></em></li>
+                        <li>category</li>
+                        <li>department</li>
+                        <li>city</li>
+                        <li>state</li>
+                        <li>location</li>
+                        <li>last_modified</li>
+                        <li>date_posted</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">sortOrder</code></td>
+                <td>No</td>
+                <td>Whether to return in ascending or descending order.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>ASC <em><small>(default)</small></em></li>
+                        <li>DESC</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- JOB BY ID -->
+    <h3 id="jobs-id"><code>/jobs/id/</code></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">id</code></td>
+                <td><strong>Yes</strong></td>
+                <td>Current job to request, by it's JobCastle id.</td>
+                <td class="small">integer</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- JOB BY URISTUB -->
+    <h3 id="jobs-uristub"><code>/jobs/uristub/</code></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">uristub</code></td>
+                <td><strong>Yes</strong></td>
+                <td>Current job to request, by it's JobCastle uristub.</td>
+                <td class="small">string</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- JOB TITLES -->
+    <h3 id="jobs-titles"><code>/jobs/titles/</code></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">page</code></td>
+                <td>No</td>
+                <td>Current page to request, if necessary.</td>
+                <td class="small">integer <em>(default <strong>0</strong>)</em></td>
+            </tr>
+            <tr>
+                <td><code class="param">perPage</code></td>
+                <td>No</td>
+                <td>Items to return per page for pagination purposes.</td>
+                <td class="small">
+                    integer
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>10 <em><small>(default)</small></em></li>
+                        <li>25</li>
+                        <li>50</li>
+                        <li>100</li>
+                        <li>250</li>
+                        <li>500</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">sortOrder</code></td>
+                <td>No</td>
+                <td>Whether to return job titles in ascending or descending order.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>ASC <em><small>(default)</small></em></li>
+                        <li>DESC</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- JOBS BY RADIUS -->
+    <h3 id="jobs-radius"><code>/jobs/radius/</code></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">zipcode</code></td>
+                <td><strong>Yes</strong></td>
+                <td>The zip code represents the central point to find jobs about a given radius.</td>
+                <td class="small">5 digit zipcode (i.e. 12202)</td>
+            </tr>
+            <tr>
+                <td><code class="param">radius</code></td>
+                <td>No</td>
+                <td>Radius, in miles, to search for jobs about the given zipcode.</td>
+                <td class="small">
+                    integer
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>10 <em><small>(default)</small></em></li>
+                        <li>25</li>
+                        <li>50</li>
+                        <li>100</li>
+                        <li>250</li>
+                        <li>500</li>
+                    </ul>
+            </tr>
+            <tr>
+                <td><code class="param">page</code></td>
+                <td>No</td>
+                <td>Current page to request, if necessary.</td>
+                <td class="small">integer <em>(default <strong>0</strong>)</em></td>
+            </tr>
+            <tr>
+                <td><code class="param">perPage</code></td>
+                <td>No</td>
+                <td>Items to return per page for pagination purposes.</td>
+                <td class="small">
+                    integer
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>10 <em><small>(default)</small></em></li>
+                        <li>25</li>
+                        <li>50</li>
+                        <li>100</li>
+                        <li>250</li>
+                        <li>500</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">orderBy</code></td>
+                <td>No</td>
+                <td>Whether to return jobs ordered by <code class="param">title</code>
+                or <code class="param">distance</code> from the given zipcode.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>distance <em><small>(default)</small></em></li>
+                        <li>title</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">sortOrder</code></td>
+                <td>No</td>
+                <td>Whether to return job titles in ascending or descending order.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>ASC <em><small>(default)</small></em></li>
+                        <li>DESC</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- JOBS COUNT -->
+    <h3 id="jobs-count"><code>/jobs/count/</code></h3>
+    <p class="important">All search filters are joined by an AND operation; they are mutually inclusive on AND. If you would like to search for multiple city/state combinations, you should use the <strong>location</strong> parameter. It overrides both city and state (as it represents a combination of the two).</p>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">state</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs within a given state.</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of two digit state codes or full state names.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">city</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs with a given city.</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of cities.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">location</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs with a given location (city/state).</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of locations.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">category</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs with a given city.</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of categories.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">schedule</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs with a given job schedule.</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of job schedules.</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- JOB SEARCH -->
+    <h3 id="jobs-search"><code>/jobs/search/</code></h3>
+    <p class="important">All search filters are joined by an AND operation; they are mutually inclusive on AND. If you would like to search for multiple city/state combinations, you should use the <strong>location</strong> parameter. It overrides both city and state (as it represents a combination of the two).</p>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter(s)</th>
+                <th>Required?</th>
+                <th>Notes</th>
+                <th>Accepted Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code class="param">state</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs within a given state.</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of two digit state codes or full state names.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">city</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs with a given city.</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of cities.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">location</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs with a given location (city/state).</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of locations.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">category</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs with a given city.</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of categories.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">schedule</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs with a given job schedule.</td>
+                <td class="small">
+                    string|array<br />
+                    <span class="important">Expects a string or array of job schedules.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">name</code></td>
+                <td>No</td>
+                <td>A search filter for selecting jobs with a given job name.</td>
+                <td class="small">
+                    string<br />
+                    <span class="important">Expects a string of a job name.</span>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">page</code></td>
+                <td>No</td>
+                <td>Current page to request, if necessary.</td>
+                <td class="small">integer <em>(default <strong>0</strong>)</em></td>
+            </tr>
+            <tr>
+                <td><code class="param">perPage</code></td>
+                <td>No</td>
+                <td>Items to return per page for pagination purposes.</td>
+                <td class="small">
+                    integer
+                    <ul>
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>10 <em><small>(default)</small></em></li>
+                        <li>25</li>
+                        <li>50</li>
+                        <li>100</li>
+                        <li>250</li>
+                        <li>500</li>
+                    </ul>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">orderBy</code></td>
+                <td>No</td>
+                <td>Returned results will be ordered based on this parameter.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>title <em><small>(default)</small></em></li>
+                        <li>category</li>
+                        <li>department</li>
+                        <li>city</li>
+                        <li>state</li>
+                        <li>location</li>
+                        <li>last_modified</li>
+                        <li>date_posted</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code class="param">sortOrder</code></td>
+                <td>No</td>
+                <td>Whether to return cities in ascending or descending order.</td>
+                <td class="small">
+                    string
+                    <ul>
+                        <li>ASC <em><small>(default)</small></em></li>
+                        <li>DESC</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <h2 id="sample-requests">Sample Response(s)</h2>
+
+    <h3><code>/cities/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "city": null,
+        "state": null,
+        "location": "Loxahatchee, FL",
+        "count": "0",
+        "url": "http://api.parallonjobs.com/jobs/location/Loxahatchee-FL"
+      },
+      {
+        "city": "Albany",
+        "state": "NY",
+        "location": "Albany, NY",
+        "count": "12",
+        "url": "http://api.parallonjobs.com/jobs/location/Albany-NY"
+      }
+    ],
+    "url": "http://api.parallonjobs.com/jobs/city/",
+    "page": 0,
+    "perPage": 2,
+    "orderBy": "city",
+    "sortOrder": "ASC",
+    "nextPage": 1,
+    "numResults": 2,
+    "totalResults": 147,
+    "totalPages": 74
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/cities/count/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "url": "http://api.parallonjobs.com/jobs/city/",
+    "count": 147
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/states/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "state": null,
+        "location": "Loxahatchee, FL",
+        "count": "0",
+        "url": "http://api.parallonjobs.com/jobs/state/"
+      },
+      {
+        "state": "AK",
+        "location": "Anchorage, AK",
+        "count": "8",
+        "url": "http://api.parallonjobs.com/jobs/state/AK"
+      }
+    ],
+    "url": "http://api.parallonjobs.com/jobs/state/",
+    "page": 0,
+    "perPage": 2,
+    "orderBy": "state",
+    "sortOrder": "ASC",
+    "nextPage": 1,
+    "numResults": 2,
+    "totalResults": 32,
+    "totalPages": 16
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/states/count/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "url": "http://api.parallonjobs.com/jobs/state/",
+    "count": 32
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/categories/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "category": "- (Per Diem)",
+        "count": "1",
+        "schedules": [
+          {
+            "schedule": "Contract",
+            "count": "1"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Per-Diem"
+      },
+      {
+        "category": "- Allied Health: Cardiac Services",
+        "count": "4",
+        "schedules": [
+          {
+            "schedule": "Full-Time",
+            "count": "4"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Allied-Health-Cardiac-Services"
+      },
+      {
+        "category": "- Allied Health: Cath Lab",
+        "count": "3",
+        "schedules": [
+          {
+            "schedule": "Full-Time",
+            "count": "2"
+          },
+          {
+            "schedule": "Contract",
+            "count": "1"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Allied-Health-Cath-Lab"
+      },
+      {
+        "category": "- Allied Health: Interventional Radiographer",
+        "count": "1",
+        "schedules": [
+          {
+            "schedule": "Full-Time",
+            "count": "1"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Allied-Health-Interventional-Radiographer"
+      },
+      {
+        "category": "- Allied Health: Laboratory",
+        "count": "5",
+        "schedules": [
+          {
+            "schedule": "Full-Time",
+            "count": "5"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Allied-Health-Laboratory"
+      },
+      {
+        "category": "- Allied Health: Occupational Therapist",
+        "count": "22",
+        "schedules": [
+          {
+            "schedule": "Full-Time",
+            "count": "11"
+          },
+          {
+            "schedule": "Contract",
+            "count": "10"
+          },
+          {
+            "schedule": "Per Diem",
+            "count": "1"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Allied-Health-Occupational-Therapist"
+      },
+      {
+        "category": "- Allied Health: Occupational Therapy Assistant",
+        "count": "6",
+        "schedules": [
+          {
+            "schedule": "Contract",
+            "count": "6"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Allied-Health-Occupational-Therapy-Assistant"
+      },
+      {
+        "category": "- Allied Health: Operating Room / Surgical Services",
+        "count": "33",
+        "schedules": [
+          {
+            "schedule": "Full-Time",
+            "count": "24"
+          },
+          {
+            "schedule": "Contract",
+            "count": "8"
+          },
+          {
+            "schedule": "Per Diem",
+            "count": "1"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Allied-Health-Operating-Room-Surgical-Services"
+      },
+      {
+        "category": "- Allied Health: Other",
+        "count": "3",
+        "schedules": [
+          {
+            "schedule": "Contract",
+            "count": "3"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Allied-Health-Other"
+      },
+      {
+        "category": "- Allied Health: Pharmacy",
+        "count": "29",
+        "schedules": [
+          {
+            "schedule": "Full-Time",
+            "count": "24"
+          },
+          {
+            "schedule": "Contract",
+            "count": "5"
+          }
+        ],
+        "url": "http://local.jobcastle.com/category/--Allied-Health-Pharmacy"
+      }
+    ],
+    "url": "http://local.jobcastle.com/category/",
+    "page": 0,
+    "perPage": 10,
+    "orderBy": "category",
+    "sortOrder": "ASC",
+    "nextPage": 1,
+    "numResults": 10,
+    "totalResults": 184,
+    "totalPages": 19
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/categories/count/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "url": "http://api.parallonjobs.com/category/",
+    "count": 182
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/schedules/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "schedule": "Contract",
+        "count": "656"
+      },
+      {
+        "schedule": "Full-Time",
+        "count": "875"
+      }
+    ],
+    "page": 0,
+    "perPage": 2,
+    "orderBy": "schedule",
+    "sortOrder": "ASC",
+    "nextPage": 1,
+    "numResults": 2,
+    "totalResults": 3,
+    "totalPages": 2
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/schedules/count/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "count": 3
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/jobs/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "id": "998",
+        "job_id": "37668221",
+        "uristub": "administrative-assistant-office-clerical-administrative-37668221",
+        "company": "All About Staffing",
+        "name": "Administrative Assistant - Office / Clerical: Administrative",
+        "location": "London, KY",
+        "city": "London",
+        "state": "KY",
+        "address": null,
+        "zipcode": "40741",
+        "category": "Office / Clerical: Administrative",
+        "department": null,
+        "schedule": "Contract",
+        "shift": null,
+        "description": "",
+        "qualifications": null,
+        "num_openings": "0",
+        "years_exp": "1",
+        "job_url": "http://www.Click2Apply.net/xs5fdvg",
+        "apply_url": "http://www.Click2Apply.net/xs5fdvg",
+        "outbound_link_url": null,
+        "apply_phone": null,
+        "date_posted": "0",
+        "created_ts": "1326224036",
+        "modified_ts": "1326224036",
+        "url": "http://api.parallonjobs.com/jobs/details/London-KY/Office-Clerical-Administrative/administrative-assistant-office-clerical-administrative-37668221"
+      },
+      {
+        "id": "1444",
+        "job_id": "37669714",
+        "uristub": "anesthesia-tech-allied-health-operating-room-surgical-services-37669714",
+        "company": "All About Staffing",
+        "name": "Anesthesia Tech - Allied Health: Operating Room / Surgical Services",
+        "location": "Pensacola, FL",
+        "city": "Pensacola",
+        "state": "FL",
+        "address": null,
+        "zipcode": "32501",
+        "category": "Allied Health: Operating Room / Surgical Services",
+        "department": null,
+        "schedule": "Full-Time",
+        "shift": null,
+        "description": "",
+        "qualifications": null,
+        "num_openings": "0",
+        "years_exp": "1",
+        "job_url": "http://www.Click2Apply.net/sgt3gx3",
+        "apply_url": "http://www.Click2Apply.net/sgt3gx3",
+        "outbound_link_url": null,
+        "apply_phone": null,
+        "date_posted": "0",
+        "created_ts": "1326224042",
+        "modified_ts": "1326224042",
+        "url": "http://api.parallonjobs.com/jobs/details/Pensacola-FL/Allied-Health-Operating-Room-Surgical-Services/anesthesia-tech-allied-health-operating-room-surgical-services-37669714"
+      }
+    ],
+    "url": "http://api.parallonjobs.com/jobs/all/",
+    "page": 0,
+    "perPage": 2,
+    "orderBy": "title",
+    "sortOrder": "ASC",
+    "nextPage": 1,
+    "numResults": 2,
+    "totalResults": 1573,
+    "totalPages": 787
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/jobs/id/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "id": "998",
+        "job_id": "37668221",
+        "uristub": "administrative-assistant-office-clerical-administrative-37668221",
+        "company": "All About Staffing",
+        "name": "Administrative Assistant - Office / Clerical: Administrative",
+        "location": "London, KY",
+        "city": "London",
+        "state": "KY",
+        "address": null,
+        "zipcode": "40741",
+        "category": "Office / Clerical: Administrative",
+        "department": null,
+        "schedule": "Contract",
+        "shift": null,
+        "description": "",
+        "qualifications": null,
+        "num_openings": "0",
+        "years_exp": "1",
+        "job_url": "http://www.Click2Apply.net/xs5fdvg",
+        "apply_url": "http://www.Click2Apply.net/xs5fdvg",
+        "outbound_link_url": null,
+        "apply_phone": null,
+        "date_posted": "0",
+        "created_ts": "1326224036",
+        "modified_ts": "1326224036",
+        "url": "http://api.parallonjobs.com/jobs/details/London-KY/Office-Clerical-Administrative/administrative-assistant-office-clerical-administrative-37668221"
+      }
+    ]
+  }
+}</code></pre>
+    </div>
+    
+    <h3><code>/jobs/uristub/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "id": "998",
+        "job_id": "37668221",
+        "uristub": "administrative-assistant-office-clerical-administrative-37668221",
+        "company": "All About Staffing",
+        "name": "Administrative Assistant - Office / Clerical: Administrative",
+        "location": "London, KY",
+        "city": "London",
+        "state": "KY",
+        "address": null,
+        "zipcode": "40741",
+        "category": "Office / Clerical: Administrative",
+        "department": null,
+        "schedule": "Contract",
+        "shift": null,
+        "description": "",
+        "qualifications": null,
+        "num_openings": "0",
+        "years_exp": "1",
+        "job_url": "http://www.Click2Apply.net/xs5fdvg",
+        "apply_url": "http://www.Click2Apply.net/xs5fdvg",
+        "outbound_link_url": null,
+        "apply_phone": null,
+        "date_posted": "0",
+        "created_ts": "1326224036",
+        "modified_ts": "1326224036",
+        "url": "http://api.parallonjobs.com/jobs/details/London-KY/Office-Clerical-Administrative/administrative-assistant-office-clerical-administrative-37668221"
+      }
+    ]
+  }
+}
+</code></pre>
+    </div>
+
+    <h3><code>/jobs/count/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "url": "http://api.parallonjobs.com/jobs/all/",
+    "count": 56,
+    "city": null,
+    "state": "CA",
+    "location": null,
+    "category": null,
+    "schedule": null
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/jobs/titles/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "id": "998",
+        "job_id": "37668221",
+        "name": "Administrative Assistant - Office / Clerical: Administrative",
+        "url": "http://api.parallonjobs.com/jobs/details/London-KY/Office-Clerical-Administrative/administrative-assistant-office-clerical-administrative-37668221"
+      },
+      {
+        "id": "1444",
+        "job_id": "37669714",
+        "name": "Anesthesia Tech - Allied Health: Operating Room / Surgical Services",
+        "url": "http://api.parallonjobs.com/jobs/details/Pensacola-FL/Allied-Health-Operating-Room-Surgical-Services/anesthesia-tech-allied-health-operating-room-surgical-services-37669714"
+      }
+    ],
+    "url": "http://api.parallonjobs.com/jobs/all/",
+    "page": 0,
+    "perPage": 2,
+    "sortOrder": "ASC",
+    "nextPage": 1,
+    "numResults": 2,
+    "totalResults": 1573,
+    "totalPages": 787
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/jobs/radius/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "postal_code": "30901",
+        "latitude": "33.461226",
+        "longitude": "-81.971733",
+        "country": "USA",
+        "timezone": "5",
+        "location": "Augusta, GA",
+        "city": "Augusta",
+        "state": "GA",
+        "id": "61",
+        "job_id": "37707452",
+        "uristub": "physical-therapist-allied-health-physical-therapist-37707452",
+        "company": "All About Staffing",
+        "name": "Physical Therapist - Allied Health: Physical Therapist",
+        "address": null,
+        "category": "Allied Health: Physical Therapist",
+        "department": null,
+        "schedule": "Full-Time",
+        "shift": null,
+        "description": "",
+        "qualifications": null,
+        "num_openings": "0",
+        "years_exp": "1",
+        "job_url": "http://www.Click2Apply.net/zjccqjr",
+        "apply_url": "http://www.Click2Apply.net/zjccqjr",
+        "outbound_link_url": null,
+        "apply_phone": null,
+        "date_posted": "0",
+        "created_ts": "1326224029",
+        "modified_ts": "1326224029",
+        "distance": "137.9246732672301",
+        "url": "http://api.parallonjobs.com/jobs/details/Augusta-GA/Allied-Health-Physical-Therapist/physical-therapist-allied-health-physical-therapist-37707452"
+      },
+      {
+        "postal_code": "30901",
+        "latitude": "33.461226",
+        "longitude": "-81.971733",
+        "country": "USA",
+        "timezone": "5",
+        "location": "Augusta, GA",
+        "city": "Augusta",
+        "state": "GA",
+        "id": "168",
+        "job_id": "37669363",
+        "uristub": "pharmacy-manager-allied-health-pharmacy-37669363",
+        "company": "All About Staffing",
+        "name": "Pharmacy Manager - Allied Health: Pharmacy",
+        "address": null,
+        "category": "Allied Health: Pharmacy",
+        "department": null,
+        "schedule": "Full-Time",
+        "shift": null,
+        "description": "",
+        "qualifications": null,
+        "num_openings": "0",
+        "years_exp": "1",
+        "job_url": "http://www.Click2Apply.net/y42vs2p",
+        "apply_url": "http://www.Click2Apply.net/y42vs2p",
+        "outbound_link_url": null,
+        "apply_phone": null,
+        "date_posted": "0",
+        "created_ts": "1326224030",
+        "modified_ts": "1326224030",
+        "distance": "137.9246732672301",
+        "url": "http://api.parallonjobs.com/jobs/details/Augusta-GA/Allied-Health-Pharmacy/pharmacy-manager-allied-health-pharmacy-37669363"
+      }
+    ],
+    "url": "http://api.parallonjobs.com/jobs/all/",
+    "zipcode": "28202",
+    "radius": 250,
+    "page": 0,
+    "perPage": 2,
+    "orderBy": "distance",
+    "sortOrder": "ASC",
+    "nextPage": 1,
+    "numResults": 2,
+    "totalResults": 180,
+    "totalPages": 90
+  }
+}</code></pre>
+    </div>
+
+    <h3><code>/jobs/search/</code> <a href="#" class="btn">Show/Hide</a></h3>
+    <div class="sample-response">
+<pre><code><p class="success"><strong>Success:</strong></p>{
+  "status_code": 200,
+  "data": {
+    "results": [
+      {
+        "id": "230",
+        "job_id": "37669261",
+        "uristub": "assistant-director-critical-care-services-nurse-director-level-37669261",
+        "company": "All About Staffing",
+        "name": "Assistant Director Critical Care Services - Nurse: Director Level",
+        "location": "N Richland Hill, TX",
+        "city": "N Richland Hill",
+        "state": "TX",
+        "address": null,
+        "zipcode": null,
+        "category": "Nurse: Director Level",
+        "department": null,
+        "schedule": "Full-Time",
+        "shift": null,
+        "description": "",
+        "qualifications": null,
+        "num_openings": "0",
+        "years_exp": "1",
+        "job_url": "http://www.Click2Apply.net/b5czfnt",
+        "apply_url": "http://www.Click2Apply.net/b5czfnt",
+        "outbound_link_url": null,
+        "apply_phone": null,
+        "date_posted": "0",
+        "created_ts": "1326224031",
+        "modified_ts": "1326224031",
+        "url": "http://api.parallonjobs.com/jobs/details/N-Richland-Hill-TX/Nurse-Director-Level/assistant-director-critical-care-services-nurse-director-level-37669261"
+      },
+      {
+        "id": "1098",
+        "job_id": "37671083",
+        "uristub": "case-manager-nurse-case-manager-37671083",
+        "company": "All About Staffing",
+        "name": "Case Manager - Nurse: Case Manager",
+        "location": "Austin, TX",
+        "city": "Austin",
+        "state": "TX",
+        "address": null,
+        "zipcode": "73301",
+        "category": "Nurse: Case Manager",
+        "department": null,
+        "schedule": "Full-Time",
+        "shift": null,
+        "description": "",
+        "qualifications": null,
+        "num_openings": "0",
+        "years_exp": "1",
+        "job_url": "http://www.Click2Apply.net/h5pt7y9",
+        "apply_url": "http://www.Click2Apply.net/h5pt7y9",
+        "outbound_link_url": null,
+        "apply_phone": null,
+        "date_posted": "0",
+        "created_ts": "1326224039",
+        "modified_ts": "1326224039",
+        "url": "http://api.parallonjobs.com/jobs/details/Austin-TX/Nurse-Case-Manager/case-manager-nurse-case-manager-37671083"
+      }
+    ],
+    "url": "http://api.parallonjobs.com/jobs/all/",
+    "city": null,
+    "state": [
+      "CA",
+      "TX"
+    ],
+    "location": null,
+    "category": null,
+    "schedule": null,
+    "page": 0,
+    "perPage": 2,
+    "orderBy": "title",
+    "sortOrder": "ASC",
+    "nextPage": 1,
+    "numResults": 2,
+    "totalResults": 373,
+    "totalPages": 187
+  }
+}</code></pre>
+    </div>
+
+    <h2 id="error-codes">Error Codes and Handling</h2>
+    <p>Every response contains a parameter <code>status_code</code>. These
+    status codes can be used to determine if an error has occurred in the
+    application or not. Below is a listing of all status codes and their
+    associated meaning. If you receive a status_code other than <strong>200</strong>
+    or <strong>304</strong>, you should also check the returned <code>errors</code>
+    parameter as it may contain additional information regarding problems
+    with your request.</p>
+
+    <h3>Error Codes</h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Status Code</th>
+                <th>Type</th>
+                <th>Reason</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>200</td>
+                <td>SUCCESS</td>
+                <td>Your request was successful.</td>
+            </tr>
+            <tr>
+                <td>304</td>
+                <td>UNMODIFIED</td>
+                <td>Your request was successful. Data has not changed.</td>
+            </tr>
+            <tr>
+                <td>400</td>
+                <td>BADREQUEST</td>
+                <td>The request could not be understood by the server due to missing or malformed parameters.</td>
+            </tr>
+            <tr>
+                <td>401</td>
+                <td>UNAUTHORIZED</td>
+                <td>Unauthorized access. The request was not signed properly or your public/private key pair is incorrect for your domain.</td>
+            </tr>
+            <tr>
+                <td>403</td>
+                <td>FORBIDDEN</td>
+                <td>The server understood the request, but is refusing to fulfill it. You may not have access to the API call.</td>
+            </tr>
+            <tr>
+                <td>404</td>
+                <td>NOTFOUND</td>
+                <td>No API method exists matching the URL specified.</td>
+            </tr>
+            <tr>
+                <td>405</td>
+                <td>INVALID</td>
+                <td>The request method was not valid.</td>
+            </tr>
+            <tr>
+                <td>420</td>
+                <td>CHILL</td>
+                <td>You have exceeded your rate limit.</td>
+            </tr>
+            <tr>
+                <td>500</td>
+                <td>INTERNALERROR</td>
+                <td>The server encountered an unexpected condition which prevented it from fulfilling the request.</td>
+            </tr>
+            <tr>
+                <td>402</td>
+                <td>OVERLOAD</td>
+                <td>The server is currently unable to handle the request due to a temporary overloading or maintenance of the server.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Example Error Response(s)</h3>
+<pre><code><p class="error"><strong>Error:</strong></p>{
+  "status_code":401,
+  "errors":[
+    "Your request is missing a referrer."
+  ],
+  "data":[
+
+  ]
+}</code></pre>
+
+    <h2 id="changelog">Documentation Change Log</h2>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Changes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>05/17/2012</td>
+                <td>Added uristub documentation.</td>
+            </tr>
+            <tr>
+                <td>01/13/2012</td>
+                <td>Added sample responses for every endpoint.</td>
+            </tr>
+            <tr>
+                <td>01/09/2012</td>
+                <td>Initial release of the documentation.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="#" id="toTop">back to top</a>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(window).scroll(function() {
+		if($(this).scrollTop() != 0) {
+			$('#toTop').fadeIn();
+		} else {
+			$('#toTop').fadeOut();
+		}
+	});
+
+	$('#toTop').click(function() {
+		$('body,html').animate({scrollTop:0}, 800);
+        return false;
+	});
+
+    $('h3 .btn').click(function() {
+        $(this).parent().next('.sample-response').slideToggle();
+        return false;
+    })
+    </script>
+</body>
+</html>

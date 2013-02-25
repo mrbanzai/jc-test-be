@@ -1,0 +1,101 @@
+.modal-style {
+    clear: both;
+    float: left;
+    display: inline;
+    vertical-align: top;
+    background: #f0f0f0;
+}
+
+.hide_apply_now, .modal-style p, .modal-style div {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.hide_apply_now {
+    width: 265px;
+}
+
+.modal_label {
+}
+
+.modal-style {
+    border: 1px solid #ccc;
+    margin-bottom: 2em;
+}
+
+.modal-style p {
+    line-height: 1.25em;
+    padding-bottom: 8px;
+}
+
+.modal-style .modal-style-section:first-child {
+    border-right: 1px solid #ccc;
+}
+
+.modal-style .modal-style-section {
+    min-height: 140px;
+    padding: 10px;
+}
+.modal-style .modal-style-section.selected {
+    background: #c3e4fd;
+}
+
+.modal-style .modal_label {
+    font-weight: bold;
+    text-align: left;
+}
+
+.modal-style .modal_label strong {
+    display: block;
+    font-size: 14px;
+}
+
+.modal-style .apply_phone .modal_option {
+    width: 200px;
+}
+
+.modal-style .apply_phone .modal_option select {
+    width: 180px;
+}
+
+.block form .modal-style input.text{
+    width: 180px;
+}
+
+.modal-style label {
+    display: block;
+    padding-bottom: 0.5em;
+    text-align: center;
+}
+
+.modal-style label.label_head {
+    margin-bottom: 0.5em;
+    border-bottom: 1px dotted #ccc;
+}
+
+.modal-style label.alignleft {
+    text-align: left;
+}
+
+.modal-style label span {
+    display: inline-block;
+    width: 150px;
+}
+.modal-style label span.apply_phone_label {
+    text-align: right;
+}
+.modal-style label span.apply_outbound_label {
+    text-align: left;
+}
+.modal-style label strong {}
+
+.modal-style span.note{
+    display: block;
+}
+
+.modal-style.disabled {
+    opacity: 0.5;
+}
+.modal-style.disabled .modal-style-section.selected {
+    background: none;
+}

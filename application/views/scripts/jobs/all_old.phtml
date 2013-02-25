@@ -1,0 +1,44 @@
+  <?php if (isset($this->results)): ?>
+    <h2>Showing All Jobs</h2>
+      <?php if (!empty($this->results)): ?>
+      <ul id="searchresults">
+      <?php
+      $alt = false;
+      foreach ($this->results as $result):
+          $id = $result['id'];
+          $date_posted = $result['date_posted'];
+          $location = $result['location'];
+          $category = $result['category'];
+          $schedule = $result['schedule'];
+      ?>
+        <li<?php echo $alt ? ' class="alt"' : ''; ?>>
+          <span class="date"><?php echo !empty($date_posted) ? date('F j Y', $date_posted) : ''; ?></span>
+          <?php
+          $url = '/job/details/';
+          if (!empty($location)) $url .= Clean::uristub($location) . '/';
+          if (!empty($category)) $url .= Clean::uristub($category) . '/';
+          $url .= Clean::uristub($result['uristub']) . '/';
+          ?>
+          <h3 class="job-title"><a href="<?php echo $url; ?>" class="job-title"><?php echo Clean::xss($result['name']); ?></a></h3>
+<!--      <a href="<?php echo $url; ?>" class="right">View Details</a>-->
+          <?php if (!empty($schedule)): ?>
+<!--      <span class="schedule"><?php echo Clean::xss($schedule); ?></span>-->
+          <?php endif; ?>
+
+          <?php if (!empty($location)): ?>
+          <span class="location"><?php echo Clean::xss($location); ?></span>
+          <?php endif; ?>
+          <?php if (!empty($category)): ?>
+          <span class="category"><?php echo Clean::xss($category); ?></span>
+          <?php endif; ?>
+        </li>
+      <?php $alt = !$alt; ?>
+      <?php endforeach; ?>
+      </ul>
+      <?php else: ?>
+      <h3>No search results were found</h3>
+        <p>No search results were found matching your criteria. Please consider loosening your search criteria and try again.</p>
+      <?php endif; ?>
+  <?php else: ?>
+  <?php echo $this->partial('partials/global/flash-messenger.phtml');?>
+  <?php endif; ?>

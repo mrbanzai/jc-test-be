@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<meta content="<?php echo $this->csrfToken(); ?>" name="csrf-token" />
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <?php
+	$this->headTitle((!empty($this->theme['company']) ? $this->theme['company'] . ' | Admin' : 'JobCastle | Admin'), 'APPEND')->setSeparator(' | ');
+	if (!empty($this->title)) {
+		foreach ((array) $this->title as $title) {
+			$this->headTitle()->append($title);
+		}
+	}
+	echo $this->headTitle();
+	?>
+	<style type="text/css" media="all">
+	@import url("/css/admin/black/style.css");
+	@import url("/css/admin/black/jquery.wysiwyg.css");
+	@import url("/css/admin/black/facebox.css");
+	@import url("/css/admin/black/visualize.css");
+	@import url("/css/admin/black/date_input.css");
+	</style>
+    <link rel="stylesheet" href="/css/admin/styles.css" />
+	<!--[if lt IE 8]><style type="text/css" media="all">@import url("/css/admin/black/ie.css");</style><![endif]-->
+    <?php
+    echo $this->headLink();
+    echo $this->placeholder('css');
+    echo $this->headScript();
+    ?>
+</head>
+<body id="<?php echo !empty($page_name) ? $page_name : 'main'; ?>-page" class="<?php echo !empty($browser) ? $browser : ''; ?>">
+	<div id="hld">
+		<div class="wrapper">
+			<div id="header">
+				<div class="hdrl"></div>
+				<div class="hdrr"></div>
+
+				<h1><a href="#"><?php echo !empty($this->theme['name']) ? Clean::xss($this->theme['name']) : 'Job Castle'; ?></a></h1>
+				<ul id="nav">
+					<li<?php echo (isset($this->route) && $this->route == '/admin/dashboard/index') ? ' class="active"' : ''; ?>><a href="/admin/dashboard/">Dashboard</a></li>
+
+					<?php if ($this->loggedIn): ?>
+						<?php if ($this->isAdmin): ?>
+							<li<?php echo (strpos($this->route, 'admin_jobs_') !== FALSE) ? ' class="active"' : ''; ?>>
+								<a href="/admin/jobs/index/">Jobs</a>
+								<ul>
+									<li<?php echo ($this->route == 'admin_jobs_index') ? ' class="active"' : ''; ?>><a href="/admin/jobs/index/">View Jobs</a></li>
+									<li<?php echo ($this->route == 'admin_jobs_create') ? ' class="active"' : ''; ?>><a href="/admin/jobs/create/">Create a New Job</a></li>
+								</ul>
+							</li>
+							<li<?php echo (strpos($this->route, 'admin_applicants_') !== FALSE) ? ' class="active"' : ''; ?>>
+								<a href="/admin/applicants/index/">Job Applicants</a>
+								<ul>
+									<li<?php echo ($this->route == 'admin_applicants_index') ? ' class="active"' : ''; ?>><a href="/admin/applicants/index/">View Job Applicants</a></li>
+								</ul>
+							</li>
+							<li<?php echo (strpos($this->route, 'admin_users_') !== FALSE) ? ' class="active"' : ''; ?>>
+								<a href="/admin/users/index/">Users</a>
+								<ul>
+									<li<?php echo ($this->route == 'admin_users_index') ? ' class="active"' : ''; ?>><a href="/admin/users/index/">View Users</a></li>
+									<li<?php echo ($this->route == 'admin_users_create') ? ' class="active"' : ''; ?>><a href="/admin/users/create/">Create New User</a></li>
+								</ul>
+							</li>
+						<?php else: ?>
+							<li<?php echo (strpos($this->route, 'admin_jobs_') !== FALSE) ? ' class="active"' : ''; ?>>
+								<a href="/admin/jobs/index/">Jobs</a>
+								<ul>
+									<li<?php echo ($this->route == 'admin_jobs_index') ? ' class="active"' : ''; ?>><a href="/admin/jobs/index/">View Jobs</a></li>
+									<li<?php echo ($this->route == 'admin_jobs_create') ? ' class="active"' : ''; ?>><a href="/admin/jobs/create/">Create New Job</a></li>
+								</ul>
+							</li>
+							<li<?php echo (strpos($this->route, 'admin_applicants_') !== FALSE) ? ' class="active"' : ''; ?>>
+								<a href="/admin/applicants/index/">Job Applicants</a>
+								<ul>
+									<li<?php echo ($this->route == 'admin_applicants_index') ? ' class="active"' : ''; ?>><a href="/admin/applicants/index/">View Job Applicants</a></li>
+								</ul>
+							</li>
+							<li<?php echo (strpos($this->route, 'admin_settings_') !== FALSE) ? ' class="active"' : ''; ?>>
+								<a href="/admin/settings/">Settings</a>
+								<ul>
+									<?php if (!empty($this->global['enableApi'])): ?>
+									<li<?php echo ($this->route == 'admin_settings_api') ? ' class="active"' : ''; ?>><a href="/admin/settings/api/">API Settings</a></li>
+									<?php endif; ?>
+									<li<?php echo ($this->route == 'admin_settings_theme') ? ' class="active"' : ''; ?>><a href="/admin/settings/theme/">Customize Theme</a></li>
+								</ul>
+							</li>
+						<?php endif; ?>
+					<?php else: ?>
+					<li><a href="/">Home</a></li>
+					<?php endif; ?>
+				</ul>
+
+				<?php if ($this->loggedIn): ?>
+				<p class="user">Logged in as <a href="/admin/users/edit/<?php echo $this->user->id; ?>"><?php echo htmlentities($this->user->firstname . ' ' . $this->user->lastname); ?></a> | <a href="/user/logout/">Logout</a></p>				<?php else: ?>
+				<p class="user"><a href="/">Login</a></p>
+				<?php endif; ?>
+			</div>
+			<!-- #header ends -->

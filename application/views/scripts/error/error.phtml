@@ -1,0 +1,74 @@
+<?php echo $this->render('partials/search/header.phtml'); ?>
+<div id="header">
+    <h1 id="logo"><a href="/"><?php echo !empty($this->theme['company']) ? Clean::xss($this->theme['company']) : 'JobCastle'; ?></a></h1>
+</div>
+<div id="searchblock" class="clearfix">
+    <div class="wrapper">
+        <form method="post" action="/search/" class="searchbar">
+            <input type="text" name="search" id="q" placeholder="Enter a job title" maxlength="32" />
+            <button type="submit" id="submit" value="search">search</button>
+            <?php if (!empty($this->searchterm)): ?>
+            <span class="searchterm">Search results for '<?php echo Clean::xss(substr($this->searchterm, 0, 32)); ?>'</span>
+            <?php endif; ?>
+            <select name="location" id="location" class="chzn" title="Location" style="visibility:hidden">
+                <?php echo $this->dropdownLocations; ?>
+            </select>
+            <select name="category" id="category" class="chzn" title="Category" style="visibility:hidden">
+                <?php echo $this->dropdownCategories; ?>
+            </select>
+            <?php if (empty($this->searchterm)): ?>
+            <span class="filter">filter results by:</span>
+            <?php endif; ?>
+        </form>
+    </div>
+</div>
+<div class="wrapper content">
+    <div class="leftcolumn">
+        <h1><?php echo $this->title; ?></h1>
+        <p><?php echo $this->message; ?></p>
+
+        <?php if ($this->code == 404): ?>
+        <div><a href="/">Return Home</a></div>
+        <div><a href="javascript:history(-1);">Go Back To The Previous Page</a></div>
+        <div class="mbottom40"><a href="/">Get Help</a></div>
+        <?php endif; ?>
+
+        <?php if ($this->environment != 'production'): ?>
+
+            <?php
+            if (!empty($this->errors->exception)):
+                $exception = $this->errors->exception;
+            ?>
+
+                <h3>Exception information:</h3>
+                <p>
+                    <b>Message:</b> <?php echo $exception->getMessage(); ?>
+                </p>
+
+                <h3>Stack trace:</h3>
+                <pre><?php echo $exception->getTraceAsString(); ?>
+                </pre>
+                <div>
+                  <h3>
+                    Detailed Stack Trace <a href="#" class="toggle">( + )</a>
+                  </h3>
+                  <div id="toggleStack" style="display:none">
+                    <?php foreach ($exception->getTrace() as $s): var_dump($s); endforeach; ?>
+                  </div>
+                </div>
+
+                <h3>Request Parameters:</h3>
+                <pre><?php var_dump($this->request->getParams()); ?></pre>
+            <?php
+            endif
+            ?>
+            <script type="text/javascript" src=/jquery-1.4.3.min.js"></script>
+            <script type="text/javascript">
+            $('.toggle').click(function() {
+                $('#toggleStack').slideToggle();
+            });
+            </script>
+        <?php endif; ?>
+    </div>
+</div>
+<?php echo $this->render('partials/search/footer.phtml'); ?>

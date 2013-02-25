@@ -1,0 +1,9 @@
+<?php
+$flash = $this->flashMessenger('warning', '<div class="message %s"><p>%s</p></div>');
+if (!empty($flash)) {
+  echo $flash;
+  //echo '<div class="message">' . $flash . '</div>';
+} else if (!empty($this->message)) {
+  echo $this->message;
+}
+?>

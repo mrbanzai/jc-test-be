@@ -1,0 +1,149 @@
+<html>
+<head>
+    <title>JobCastle JavaScript Client Library - Examples</title>
+    <style type="text/css">
+    #wrapper { display: block; position: absolute; background: #f0f0f0; width: 578px; height: 378px; border: 1px solid #999; padding: 10px; top: 50%; left: 50%; margin-top: -200px; margin-left: -300px; overflow: auto; font-size: 12px; line-height: 16px; font-family: Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; }
+    #console { padding: 0;  margin: 0; }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    // just used for this example, referrer injection. disregard
+    function logger(json) {
+        var output;
+        if (window.console) console.log(json);
+
+        if (typeof json != 'string') {
+            try {
+                output = '<div>' + JSON.stringify(json, undefined, 2) + '</div>';
+            } catch (e) {
+                output = '<div>' + json + '</div>';
+            }
+        } else {
+            output = '<div>' + json + '</div>';
+        }
+        $(output + "<br />").appendTo($('#console'));
+    }
+    </script>
+</head>
+<body>
+    Note that this will not work as we cannot spoof the referrer to "parallonjobs.com"
+    via JavaScript.
+    <div id="wrapper">
+        <pre id="console"></pre>
+    </div>
+
+    <!-- http://stackoverflow.com/questions/4337959/need-hmac-sha1-encryption-library-for-javascript -->
+    <script type="text/javascript" src="../libs/jobcastle.js"></script>
+    <script type="text/javascript">
+    // setup the public and private keys
+    var apiBaseUrl = 'http://local.jobcastle.com/api/';
+    var publicKey = '50f27ab87ceae988f43d8ca191159bfd673c87cf';
+    var privateKey = '63aace81abe7f536843834919cd7931bd9053149';
+
+    // instantiate the client library
+    var client = new Jobcastle(publicKey, privateKey, apiBaseUrl);
+
+    // retrieve the total number of categories (no params)
+    logger('=== retrieve the total number of categories (no params) ===');
+
+    client.get('/categories/count/', function(data, textStatus, jqXHR) {
+        logger('The total number of categories:');
+        logger(data);
+    });
+
+    // retrieve all categories with their counts in ascending order (no params)
+    logger('=== retrieve all categories with their counts in ascending order (no params) ===');
+
+    client.get('/categories/', function(data, textStatus, jqXHR) {
+        logger('The first categories, defaulting to 10 per page in ascending order:');
+        logger(data);
+    });
+
+    // retrieve all categories with their counts in descending order
+    logger('=== retrieve all categories with their counts in descending order ===');
+
+    client.get('/categories/', { 'sortOrder': 'DESC' }, function(data, textStatus, jqXHR) {
+        logger('The first categories, defaulting to 10 per page in descending order:');
+        logger(data);
+    });
+
+    // retrieve a small subset of categories for pagination
+    logger('=== retrieve a small subset of categories for pagination ===');
+
+    client.get('/categories/', { 'perPage': 5 }, function(data, textStatus, jqXHR) {
+        logger('The first 5 categories:');
+        logger(data);
+    });
+
+    //=======
+    // CITIES
+    //=======
+
+    // the total number of cities
+    client.get('/cities/count/', function(data, textStatus, jqXHR) {
+        logger('The total number of cities:');
+        logger(data);
+    });
+
+    // retrieve cities with their names in ascending order
+    client.get('/cities/', function(data, textStatus, jqXHR) {
+        logger('The first cities, defaulting to 25 per page ordered by name in ascending order:');
+        logger(data);
+    });
+
+    // retrieve cities with their names in descending order
+    client.get('/cities/', { 'sortorder': 'DESC' }, function(data, textStatus, jqXHR) {
+        logger('The first cities, defaulting to 25 per page ordered by name in descending order:');
+        logger(data);
+    });
+
+    // retrieve cities with their counts in descending order
+    client.get('/cities/', { 'orderBy': 'count', 'sortorder': 'DESC' }, function(data, textStatus, jqXHR) {
+        logger('The first cities, defaulting to 25 per page ordered by count in descending order:');
+        logger(data);
+    });
+
+    // example of retrieving a small subset of cities for pagination
+    client.get('/cities/', { 'perPage': 5 }, function(data, textStatus, jqXHR) {
+        logger('The first 5 cities:');
+        logger(data);
+    });
+
+    //=======
+    // STATES
+    //=======
+
+    // retrieve the total number of states
+    client.get('/states/count/', function(data, textStatus, jqXHR) {
+        logger('The total number of states:');
+        logger(data);
+    });
+
+    // retrieve states with their names in ascending order
+    client.get('/states/', function(data, textStatus, jqXHR) {
+        logger('The first states, defaulting to 25 per page ordered by name in ascending order:');
+        logger(data);
+    });
+
+    // retrieve states with their names in descending order
+    client.get('/states/', { 'sortOrder': 'DESC' }, function(data, textStatus, jqXHR) {
+        logger('The first states, defaulting to 25 per page ordered by name in descending order:');
+        logger(data);
+    });
+
+    // retrieve states with their counts in descending order
+    client.get('/states/', { 'orderBy': 'count', 'sortOrder': 'DESC' }, function(data, textStatus, jqXHR) {
+        logger('The first states, defaulting to 25 per page ordered by count in descending order:');
+        logger(data);
+    });
+
+    // example of retrieving a small subset of states for pagination
+    client.get('/states/', { 'perPage': 5 }, function(data, textStatus, jqXHR) {
+        logger('The first 5 states:');
+        logger(data);
+    });
+
+
+    </script>
+</body>
+</html>

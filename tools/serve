@@ -1,0 +1,9 @@
+#!/bin/bash
+BASE_DIR="$(cd $(dirname $0)/..; pwd)"
+
+main () {
+    cd $BASE_DIR > /dev/null 2>&1
+    ENVIRONMENT=local php -S 0.0.0.0:3100 -t public/ public/local.php
+}
+
+main

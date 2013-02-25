@@ -1,0 +1,102 @@
+<div class="block">
+	<div class="block_head">
+		<div class="bheadl"></div>
+		<div class="bheadr"></div>
+
+		<h2>Job Management</h2>
+
+		<ul>
+			<li><a href="/admin/jobs/create/" class="btn long">Create New Job</a></li>
+		</ul>
+	</div>
+	<!-- .block_head ends -->
+
+	<div class="block_content">
+        <?php echo $this->partial('partials/global/flash-messenger.phtml');?>
+
+		<?php if (!empty($this->jobs)): ?>
+		<table class="sortable" cellpadding="0" cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th>Internal ID</th>
+                    <th>Job ID</th>
+					<?php if ($this->isAdmin): ?>
+					<th>Client</th>
+					<?php endif; ?>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Category</th>
+                    <th># Openings</th>
+                    <th>Years Exp.</th>
+                    <th>Editable</th>
+					<th>Closed</th>
+                    <th>Date Posted</th>
+					<th>Last Updated</th>
+					<th style="width:130px"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($this->jobs as $job): ?>
+				<tr>
+                    <td><?php echo (int) $job['id']; ?></td>
+                    <td><?php echo Clean::xss($job['job_id']); ?></td>
+					<?php if ($this->isAdmin): ?>
+                    <td><?php echo Clean::xss($job['client']); ?></td>
+					<?php endif; ?>
+                    <td><?php echo Clean::xss($job['name']); ?></td>
+                    <td><?php echo Clean::xss($job['location']); ?></td>
+                    <td><?php echo Clean::xss($job['category']); ?></td>
+                    <td><?php echo (int) $job['num_openings']; ?></td>
+                    <td><?php echo (int) $job['years_exp']; ?></td>
+                    <td><?php echo $job['editable'] == 1 ? 'yes' : 'no'; ?></td>
+					<td>
+						<input type="checkbox" name="closed<?php echo $job['id']; ?>" class="btnStatus" id="closed<?php echo $job['id']; ?>" data-id="<?php echo $job['id']; ?>"<?php echo $job['closed'] == 1 ? ' checked="checked"' : ''; ?> />
+					</td>
+                    <td><?php echo date('m.d.Y H:i:s', !empty($job['date_posted']) ? $job['date_posted'] : $job['created_ts']); ?></td>
+                    <td><?php echo date('m.d.Y H:i:s', $job['modified_ts']); ?></td>
+                    <?php if ($this->isAdmin || ($job['editable'] == 1 && $this->user->id == $job['created_by'])): ?>
+                    <td style="width:130px">
+						<a href="/admin/jobs/edit/<?php echo (int) $job['id']; ?>" title="Edit Job" alt="confirm" class="btn tiny table">edit</a>
+						<a href="/admin/jobs/delete/<?php echo (int) $job['id']; ?>" title="Delete Job" alt="confirm" class="btn tiny table nomargin btnDelete">delete</a>
+                    </td>
+					<?php else: ?>
+					<td style="width:130px"></td>
+                    <?php endif; ?>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php else: ?>
+		<div class="message warning"><p>No jobs currently exist. Why don't you try creating one?</p></div>
+		<?php endif; ?>
+	</div>
+</div>
+
+<?php $this->placeholder('js')->captureStart(); ?>
+<script type="text/javascript">
+$('.btnStatus').click(function() {
+	var $this = $(this);
+	var status = $this.is(':checked') ? 1 : 0;
+	var href = '/admin/jobs/close/' + parseInt($this.data('id')) + '/' + status + '/';
+	if (confirm('Are you sure you would like to change the status of this job?')) {
+		$.post(href, {}, function(data) {
+			data = $.trim(data);
+			if (data == 'success') {
+				$this.attr('checked', status == 1);
+			} else {
+				$this.attr('checked', status != 1);
+				window.location.reload();
+			}
+		}, 'text');
+	}
+	return false;
+});
+
+$('.btnDelete').click(function() {
+	if (confirm('Are you sure you would like to delete this job?')) {
+		return true;
+	}
+	return false;
+})
+</script>
+<?php $this->placeholder('js')->captureEnd(); ?>

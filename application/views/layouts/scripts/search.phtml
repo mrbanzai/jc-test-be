@@ -1,0 +1,11 @@
+<?php
+echo $this->render(
+    'partials/search/header.phtml',
+    array(
+        'title' => !empty($this->title) ? $this->title : null,
+        'description' => !empty($this->description) ? $this->description : null
+    )
+);
+?>
+<?php echo $this->layout()->content ?>
+<?php echo $this->render('partials/search/footer.phtml'); ?>

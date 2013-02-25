@@ -1,0 +1,221 @@
+<div class="block">
+    <div class="block_head">
+        <div class="bheadl"></div>
+        <div class="bheadr"></div>
+        <h2><?php echo (!empty($this->edit)) ? 'Edit' : 'Create a New'; ?> Job</h2>
+
+        <?php if (!empty($this->edit)): ?>
+        <?php
+        $url = '/job/details/';
+        if (!empty($this->job['location'])) $url .= Clean::uristub($this->job['location']) . '/';
+        if (!empty($this->job['category'])) $url .= Clean::uristub($this->job['category']) . '/';
+        $url .= Clean::uristub($this->job['uristub']) . '/';
+        ?>
+        <ul>
+            <li>
+                <a href="<?php echo $url; ?>" target="_blank">View Job</a>
+            </li>
+        </ul>
+        <?php endif; ?>
+    </div>
+    <div class="block_content">
+        <p class="breadcrumb">
+            <a href="/admin/">Admin</a> &raquo;
+            <a href="/admin/jobs/">Jobs</a> &raquo;
+            <strong><?php echo (!empty($this->edit)) ? 'Edit' : 'Create a New'; ?> Job</strong>
+        </p>
+
+        <?php
+        $message = (!empty($this->edit)) ?
+            'You can update the job details by modifying the fields below.' :
+            'Create a new job post by entering details in the fields below.';
+        echo $this->partial(
+            'partials/global/flash-messenger.phtml',
+            array('message' => '<div class="message info"><p>' . $message . '</p></div>')
+        );
+        ?>
+
+        <form action="/admin/jobs/<?php echo (!empty($this->edit)) ? 'edit' : 'create'; ?>/<?php echo !empty($this->job['id']) ? (int) $this->job['id'] : ''; ?>" method="post" name="updateJob" id="updateJob">
+            <?php if ($this->isAdmin && !empty($this->clients)): ?>
+            <p>
+                <label for="created_by">Post Job on Behalf of Client*:</label><br />
+                <select name="created_by" id="created_by" class="styled">
+                    <option value=""></option>
+                    <?php foreach ($this->clients as $client_id => $client_name): ?>
+                    <option value="<?php echo $client_id; ?>"<?php echo (!empty($this->job['created_by']) && $this->job['created_by'] == $client_id) ? ' selected="selected"' : ''; ?>><?php echo $client_name; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <span class="note">This is for administrators only. It allows you to <?php echo $this->edit ? 'edit' : 'create'; ?> job posts on behalf of clients.</span>
+            </p>
+            <?php endif; ?>
+            <p>
+                <label>Company Name:</label><br />
+                <input type="text" class="text small" name="company" id="company" value="<?php echo !empty($this->job['company']) ? Clean::xss($this->job['company']) : ''; ?>" />
+            </p>
+            <p>
+                <label>Job Title*:</label><br />
+                <input type="text" class="text small" name="name" id="name" value="<?php echo !empty($this->job['name']) ? Clean::xss($this->job['name']) : ''; ?>" />
+            </p>
+            <p>
+                <label>Job Location*:</label><br />
+                <input type="text" class="text small" name="location" id="location" value="<?php echo !empty($this->job['location']) ? Clean::xss($this->job['location']) : ''; ?>" />
+            </p>
+            <p>
+                <label>Job Category*:</label><br />
+                <input type="text" class="text small" name="category" id="category" value="<?php echo !empty($this->job['category']) ? Clean::xss($this->job['category']) : ''; ?>" />
+            </p>
+            <p>
+                <label>Department:</label><br />
+                <input type="text" class="text small" name="department" id="department" value="<?php echo !empty($this->job['department']) ? Clean::xss($this->job['department']) : ''; ?>" />
+            </p>
+            <p>
+                <label>Job Schedule:</label><br />
+                <input type="text" class="text small" name="schedule" id="schedule" value="<?php echo !empty($this->job['schedule']) ? Clean::xss($this->job['schedule']) : ''; ?>" />
+            </p>
+            <p>
+                <label>Job Shift:</label><br />
+                <input type="text" class="text small" name="shift" id="shift" value="<?php echo !empty($this->job['shift']) ? Clean::xss($this->job['shift']) : ''; ?>" />
+                <span class="note">if applicable</span>
+            </p>
+            <p>
+                <label>Job Description*:</label><br />
+                <textarea name="description" id="description" class="wysiwyg"><?php echo !empty($this->job['description']) ? $this->escape($this->job['description']) : ''; ?></textarea>
+            </p>
+            <p>
+                <label>Job Qualifications:</label><br />
+                <textarea name="qualifications" id="qualifications" class="wysiwyg"><?php echo !empty($this->job['qualifications']) ? $this->escape($this->job['qualifications']) : ''; ?></textarea>
+            </p>
+            <p>
+                <label>Number of Openings:</label><br />
+                <select name="num_openings" id="num_openings" class="styled">
+                    <option value=""></option>
+                    <?php for($i = 1; $i < 51; $i++): ?>
+                    <option value="<?php echo $i; ?>" <?php echo (!empty($this->job['num_openings']) && $this->userinfo['num_openings'] == $i) ? 'selected="selected"' : ''; ?>><?php echo $i; ?></option>
+                    <?php endfor; ?>
+                </select>
+            </p>
+            <p>
+                <label>Years of Experience:</label><br />
+                <select name="years_exp" id="years_exp" class="styled">
+                    <option value=""></option>
+                    <?php for($i = 1; $i < 26; $i++): ?>
+                    <option value="<?php echo $i; ?>" <?php echo (!empty($this->job['years_exp']) && $this->userinfo['years_exp'] == $i) ? 'selected="selected"' : ''; ?>><?php echo $i; ?></option>
+                    <?php endfor; ?>
+                </select>
+            </p>
+            <p class="hide_apply_now">
+                <label>Hide "Apply Now":</label><br />
+                <select name="hide_apply_now" id="hide_apply_now" class="styled">
+                    <option value="0"<?php echo (isset($this->job['hide_apply']) && $this->job['hide_apply'] == 0) ? 'selected="selected"' : ''; ?>>No</option>
+                    <option value="1"<?php echo (isset($this->job['hide_apply']) && $this->job['hide_apply'] == 1) ? 'selected="selected"' : ''; ?>>Yes</option>
+                </select>
+            </p>
+
+            <p><label class="modal_label">Select an "Apply Now" Modal Style</label></p>
+            <div class="modal-style">
+                <div class="apply_online modal-style-section">
+                    <label for="modal_style_apply" class="label_head">
+                        <input type="radio" name="modal_style" id="modal_style_apply" value="apply" <?php echo (!isset($this->job['modal_style']) || $this->job['modal_style'] == 'apply') ? 'checked="checked"' : ''; ?> />
+                        Apply Online
+                    </label>
+                    <ul>
+                        <li>Name</li>
+                        <li>Email</li>
+                        <li>Current Job Title</li>
+                        <li>Cover Letter</li>
+                        <li>Resume Upload</li>
+                    <ul>
+                </div><div class="apply_phone modal-style-section">
+                    <label for="modal_style_phone" class="label_head">
+                        <span class="apply_phone_label">
+                            <input type="radio" name="modal_style" id="modal_style_phone" value="phone" <?php echo (isset($this->job['modal_style']) && $this->job['modal_style'] == 'phone') ? 'checked="checked"' : ''; ?> />
+                            Apply By Phone
+                        </span>
+                        <strong>+</strong>
+                        <span class="apply_outbound_label">Outbound Link</span>
+                    </label>
+                    <ul>
+                        <li>Name</li>
+                        <li>Email</li>
+                        <li>Current Job Title</li>
+                    </ul>
+                    <div class="modal_option">
+                        <label for="dynamic_phone" class="alignleft">Use dynamic phone #:</label>
+                        <select name="dynamic_phone" id="dynamic_phone" class="styled">
+                            <option value="0"<?php echo (isset($this->job['dynamic_phone']) && $this->job['dynamic_phone'] == 0) ? 'selected="selected"' : ''; ?>>No</option>
+                            <option value="1"<?php echo (isset($this->job['dynamic_phone']) && $this->job['dynamic_phone'] == 1) ? 'selected="selected"' : ''; ?>>Yes</option>
+                        </select>
+                    </div>
+                    <div class="modal_option">
+                        <label for="apply_phone" class="alignleft">Or use phone #:</label>
+                        <input type="text" class="text small" name="apply_phone" id="apply_phone" placeholder="insert phone #" value="<?php echo !empty($this->job['apply_phone']) ? Clean::xss($this->job['apply_phone']) : ''; ?>" />
+                        <span class="note">Use this static phone #</span>
+                    </div>
+                    <div class="modal_option">
+                        <label for="outbound_link_url" class="alignleft">Outbound link:</label>
+                        <input type="text" class="text small" name="outbound_link_url" placeholder="insert URL" value="<?php echo !empty($this->job['outbound_link_url']) ? Clean::xss($this->job['outbound_link_url']) : ''; ?>" />
+                        <span class="note">Redirects here after apply</span>
+                    </div>
+                </div>
+                <div class="apply_direct modal-style-section">
+                    <label for="modal_style_direct" class="label_head">
+                        <input type="radio" name="modal_style" id="modal_style_none" value="none" <?php echo (isset($this->job['modal_style']) && $this->job['modal_style'] == 'none') ? 'checked="checked"' : ''; ?> />
+                        Direct Apply
+                    </label>
+                </div>
+            </div>
+            <p>
+                <input type="hidden" name="feed_id" id="feed_id" value="<?php echo (!empty($this->job['feed_id'])) ? Clean::xss($this->job['feed_id']) : 1; ?>" />
+                <input type="hidden" name="job_id" id="job_id" value="<?php echo (!empty($this->job['job_id'])) ? Clean::xss($this->job['job_id']) : ''; ?>" />
+                <input type="hidden" name="id" id="id" value="<?php echo (!empty($this->job['id'])) ? Clean::xss($this->job['id']) : ''; ?>" />
+                <input class="submit small" type="submit" value="Submit">
+            </p>
+        </form>
+    </div>
+</div>
+
+<?php $this->placeholder('js')->captureStart(); ?>
+<script type="text/javascript">
+    function toggleRadios() {
+        $('.modal-style input[type=radio]').each(function() {
+            $(this).closest('.modal-style-section').toggleClass('selected', $(this).is(':checked'));
+        });
+    }
+    $('.modal-style input[type=radio]').click(toggleRadios);
+    $(toggleRadios);
+
+    function toggleDisabled() {
+        if ($('select#hide_apply_now').val() == "1") {
+            $('.modal-style input[type=radio]').attr('disabled', 'disabled');
+            $('.modal-style').addClass('disabled');
+        }
+        else {
+            $('.modal-style input[type=radio]').removeAttr('disabled');
+            $('.modal-style').removeClass('disabled');
+        }
+    }
+    $('select#hide_apply_now').change(toggleDisabled);
+    $(toggleDisabled);
+
+    // auto check radios on switch
+    $('.modal-style .modal-style-section').click(function() {
+        $(this).find('input[type=radio]').attr('checked', 'checked');
+        toggleRadios();
+    });
+
+    function toggleDynamicPhone() {
+        var val = $(this).val();
+        if (val == '1') {
+            $('#apply_phone').attr('disabled', 'disabled');
+        } else {
+            $('#apply_phone').removeAttr('disabled');
+        }
+    }
+
+    // watch for dynamic phone click
+    $('#dynamic_phone').change(toggleDynamicPhone);
+
+    // trigger change
+    $(toggleDynamicPhone);
+</script>
+<?php $this->placeholder('js')->captureEnd(); ?>

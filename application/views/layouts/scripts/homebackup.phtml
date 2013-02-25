@@ -1,0 +1,11 @@
+<?php
+echo $this->assign(array(
+        'bodyID' => 'home',
+        'containerClass' => 'container_home'
+    ))->render('partials/home/header.phtml');
+echo $this->assign(array(
+    'showSearchButtons' => false,
+    'searchFormClass' => 'home'
+    ))->render('partials/search/search.phtml');
+echo $this->layout()->content;
+echo $this->render('partials/home/footer.phtml');

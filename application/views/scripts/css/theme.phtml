@@ -1,0 +1,63 @@
+<?php
+// only perform Clean:xss once
+$bgcolor = '#' . (!empty($this->theme['bgcolor']) ? Clean::xss($this->theme['bgcolor']) : 'FFF');
+$fgcolor = '#' . (!empty($this->theme['fgcolor']) ? Clean::xss($this->theme['fgcolor']) : '000');
+$link = '#' . (!empty($this->theme['link']) ? Clean::xss($this->theme['link']) : '5171ac');
+$link_hover = '#' . (!empty($this->theme['link_hover']) ? Clean::xss($this->theme['link_hover']) : '41619C');
+$bgbutton = '#' . (!empty($this->theme['bgbutton']) ? Clean::xss($this->theme['bgbutton']) : '000');
+$bgbutton_hover = '#' . (!empty($this->theme['bgbutton_hover']) ? Clean::xss($this->theme['bgbutton_hover']) : '111');
+$fgbutton = '#' . (!empty($this->theme['fgbutton']) ? Clean::xss($this->theme['fgbutton']) : 'FFF');
+$heading = '#' . (!empty($this->theme['heading']) ? Clean::xss($this->theme['heading']) : 'FFF');
+?>
+body { background: <?php echo $bgcolor; ?>; color: <?php echo $fgcolor; ?>; }
+a, a:link, a:visited { color: <?php echo $link; ?>; }
+a:hover { color: <?php echo $link_hover; ?>; }
+
+button,
+.btn,
+a.btn,
+#home .column ul li .btn,
+#searchblock button { background-color: <?php echo $bgbutton; ?>; color: <?php echo $fgbutton; ?>; }
+
+button:hover,
+.btn:hover,
+a.btn:hover,
+#home .column ul li .btn:hover,
+#searchblock button:hover { background-color: <?php echo $bgbutton_hover; ?>; color: <?php echo $fgbutton; ?>; }
+
+/* home customizations */
+#home .column  { background: <?php echo $bgcolor; ?>; color: <?php echo $fgcolor; ?>; }
+#home #searchblock { background: <?php echo $bgcolor; ?>; color: <?php echo $fgcolor; ?>; }
+
+/* custom dropdown */
+#searchblock div.chzn-container a.chzn-single,
+#searchblock div.chzn-container a.chzn-single div,
+#searchblock .chzn-container-single div.chzn-drop,
+#searchblock .chzn-container ul.chzn-results li.no-results { background: <?php echo $bgbutton; ?>; color: <?php echo $fgbutton; ?>; }
+#searchblock .chzn-container-active a.chzn-single-with-drop { border-bottom-color: <?php echo $bgbutton; ?>; ?> }
+
+/* custom dropdown hover */
+#searchblock .chzn-container ul.chzn-results li.highlighted { background: <?php echo $bgbutton_hover; ?>; color: <?php echo $fgbutton; ?>; }
+#searchblock div.chzn-container .chzn-single:hover,
+#searchblock div.chzn-container .chzn-single:hover > div { background: <?php echo $bgbutton_hover; ?>; }
+
+#logo,
+#logo a { color: <?php echo $link; ?>; }
+#searchblock #q { border-color: <?php echo $bgbutton; ?>; }
+
+/* job customization */
+#job .leftcolumn .job-details h1,
+#job .leftcolumn .job-details h1 a,
+#job .leftcolumn .job-details h2,
+#job .leftcolumn .job-details h2 a,
+#job .leftcolumn .job-details h3,
+#job .leftcolumn .job-details h3 a,
+#job .leftcolumn .job-details h4,
+#job .leftcolumn .job-details h4 a,
+#job .leftcolumn .job-details h5,
+#job .leftcolumn .job-details h5 a,
+#job .leftcolumn .job-details h6,
+#job .leftcolumn .job-details h6 a  { color: <?php echo $heading; ?>; }
+
+/* search customization */
+#search #searchblock { background: <?php echo $bgcolor; ?>; color: <?php echo $fgcolor; ?>; }

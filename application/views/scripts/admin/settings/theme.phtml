@@ -1,0 +1,121 @@
+<div class="block">
+    <div class="block_head">
+        <div class="bheadl"></div>
+        <div class="bheadr"></div>
+        <h2>Update Theme</h2>
+    </div>
+    <div class="block_content">
+        <p class="breadcrumb">
+            <a href="/admin/">Admin</a> &raquo;
+            <a href="/admin/settings/">Settings</a> &raquo;
+            <strong>Customize <?php if ($this->isAdmin): ?><em><?php echo Clean::xss($this->settings['company']); ?>'s</em><?php endif; ?> Theme</strong>
+        </p>
+
+        <?php echo $this->partial('partials/global/flash-messenger.phtml'); ?>
+
+        <form action="/admin/settings/theme/<?php echo $this->settings['created_by']; ?>/" method="post" enctype="multipart/form-data" name="updateTheme" id="updateTheme">
+            <p>
+                <label for="company">Company Name*:</label>
+                <input type="text" class="text small" name="company" id="company" value="<?php echo !empty($this->settings['company']) ? Clean::xss($this->settings['company']) : ''; ?>" />
+                <span class="note">This will be used in the title, header, and footer.</span>
+            </p>
+            <p>
+                <label for="company">Company Website:</label>
+                <input type="text" class="text small" name="website" id="website" value="<?php echo !empty($this->settings['website']) ? Clean::xss($this->settings['website']) : ''; ?>" />
+                <span class="note">This will be used in the footer for redirecting back to your website.</span>
+            </p>
+            <p>
+                <label for="logo">Header Image*:</label>
+                <input type="file" class="text small" name="logo" id="logo" value="<?php echo !empty($this->settings['logo']) ? Clean::xss($this->settings['logo']) : ''; ?>" />
+                <span class="file_note">Image must be 890x400 pixels or smaller with an extension of gif, jpg, jpeg, or png. <small><em>A small filesize is important for SEO.</em></small></span>
+                <?php if (!empty($this->settings['logo'])): ?>
+                <br /><img src="<?php echo $this->settings['logo']  . '?' . time(); ?>" alt="Site Logo" />
+                <?php endif; ?>
+            </p>
+            <p>
+                <label>Background Color*:</label>
+                <span class="cp">
+                    <span><input type="hidden" class="cp_hidden" name="bgcolor" id="bgcolor" value="<?php echo !empty($this->settings['bgcolor']) ? Clean::xss($this->settings['bgcolor']) : ''; ?>" /></span>
+                </span>
+            </p>
+            <p>
+                <label>Text Color*:</label>
+                <span class="cp">
+                    <span><input type="hidden" class="cp_hidden" name="fgcolor" id="fgcolor" value="<?php echo !empty($this->settings['fgcolor']) ? Clean::xss($this->settings['fgcolor']) : ''; ?>" /></span>
+                </span>
+            </p>
+            <p>
+                <label>Link Color*:</label>
+                <span class="cp">
+                    <span><input type="hidden" class="cp_hidden" name="link" id="link" value="<?php echo !empty($this->settings['link']) ? Clean::xss($this->settings['link']) : ''; ?>" /></span>
+                </span>
+            </p>
+            <p>
+                <label>Link Hover Color*:</label>
+                <span class="cp">
+                    <span><input type="hidden" class="cp_hidden" name="link_hover" id="link_hover" value="<?php echo !empty($this->settings['link_hover']) ? Clean::xss($this->settings['link_hover']) : ''; ?>" /></span>
+                </span>
+            </p>
+            <p>
+                <label>Button Background Color*:</label>
+                <span class="cp">
+                    <span><input type="hidden" class="cp_hidden" name="bgbutton" id="bgbutton" value="<?php echo !empty($this->settings['bgbutton']) ? Clean::xss($this->settings['bgbutton']) : ''; ?>" /></span>
+                </span>
+            </p>
+            <p>
+                <label>Button Background Hover/Selected Color*:</label>
+                <span class="cp">
+                    <span><input type="hidden" class="cp_hidden" name="bgbutton_hover" id="bgbutton_hover" value="<?php echo !empty($this->settings['bgbutton_hover']) ? Clean::xss($this->settings['bgbutton_hover']) : ''; ?>" /></span>
+                </span>
+            </p>
+            <p>
+                <label>Button Text Color*:</label>
+                <span class="cp">
+                    <span><input type="hidden" class="cp_hidden" name="fgbutton" id="fgbutton" value="<?php echo !empty($this->settings['fgbutton']) ? Clean::xss($this->settings['fgbutton']) : ''; ?>" /></span>
+                </span>
+            </p>
+            <p>
+                <label>Secondary Heading Color*:</label>
+                <span class="cp">
+                    <span><input type="hidden" class="cp_hidden" name="heading" id="heading" value="<?php echo !empty($this->settings['heading']) ? Clean::xss($this->settings['heading']) : ''; ?>" /></span>
+                </span>
+            </p>
+            <p>
+                <input type="hidden" name="created_by" id="created_by" value="<?php echo !empty($this->settings['created_by']) ? (int) $this->settings['created_by'] : ''; ?>" />
+                <input class="submit small" type="submit" value="Submit" />
+            </p>
+        </form>
+    </div>
+</div>
+
+<?php $this->headLink()->appendStylesheet('/css/colorpicker.css'); ?>
+<?php $this->placeholder('js')->captureStart(); ?>
+<script type="text/javascript" src="/js/colorpicker.js"></script>
+<script type="text/javascript">
+// initialize color pickers
+$('.cp').each(function() {
+    var $cp = $(this);
+    var color = $cp.find('input').val();
+    $cp.ColorPicker({
+        color: '#' + $cp.find('input').val(),
+        onBeforeShow: function () {
+            $cp.ColorPickerSetColor($cp.find('input').val());
+        },
+        onShow: function (cp) {
+            $(cp).fadeIn(500);
+            return false;
+        },
+        onHide: function (cp) {
+            $(cp).fadeOut(500);
+            return false;
+        },
+        onSubmit: function(hsb, hex, rgb, el) {
+            var $el = $(el);
+            $el.find('input').val(hex);
+            $el.find('span').css('backgroundColor', '#' + hex.toUpperCase());
+            $el.ColorPickerHide();
+        }
+    }).find('span').css('backgroundColor', '#' + color).attr('title', '#' + color);
+});
+</script>
+<?php $this->placeholder('js')->captureEnd(); ?>
