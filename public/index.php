@@ -4,11 +4,41 @@ require_once dirname(__FILE__) . '/../library/Purifier/HTMLPurifier.auto.php';
 date_default_timezone_set('America/New_York');
 register_shutdown_function('session_write_close');
 
+// Define path to application directory
+defined('APPLICATION_PATH')
+    || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
+
+// Define application environment
+defined('APPLICATION_ENV')
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+
+defined('BASE_PATH')
+    || define('BASE_PATH', realpath(dirname(__FILE__) . '/..'));
+
+defined('SITE_ROOT')
+    || define('SITE_ROOT', 'http://'.$_SERVER['HTTP_HOST'].'/');
+
+// Ensure library/ is on include_path
+set_include_path(implode(PATH_SEPARATOR, array(
+    realpath(APPLICATION_PATH . '/../library'),
+    get_include_path(),
+)));
+
+/** Zend_Application */
+require_once 'Zend/Application.php';
+
+// Create application, bootstrap, and run
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    APPLICATION_PATH . '/configs/application.ini'
+);
+$application->bootstrap()
+            ->run();
+
+/*
 $path = rtrim(dirname(__FILE__), DIRECTORY_SEPARATOR);
 
 define('APPLICATION_ENV', (getenv('ENVIRONMENT') ? getenv('ENVIRONMENT') : 'production'));
-define('BASE_PATH', rtrim(substr($path, 0, strrpos($path, DIRECTORY_SEPARATOR) + 1), DIRECTORY_SEPARATOR));
-define('SITE_ROOT', 'http://'.$_SERVER['HTTP_HOST'].'/');
 define('APPLICATION_PATH', BASE_PATH . '/application');
 
 if (APPLICATION_ENV != 'production') {
@@ -16,6 +46,7 @@ if (APPLICATION_ENV != 'production') {
     ini_set('display_errors', 'on');
 }
 
+// Not sure why
 $old = get_include_path();
 $old = explode(':', $old);
 array_pop($old);
@@ -38,62 +69,5 @@ $app = new Zend_Application(
 // bootstrap
 $app->bootstrap();
 
-// run if not a cronjob
-if (!defined('IS_CRONJOB') || IS_CRONJOB == false) {
-    $app->run();
-} else {
-
-    // CLI specific
-    $getopt = new Zend_Console_Getopt(
-        array(
-        'action|a=s' => 'action to perform in format of "module/controller/action"',
-        'help|h'     => 'displays usage information',
-        'list|l'     => 'List available jobs',
-        )
-    );
-
-    try {
-        $getopt->parse();
-    } catch (Zend_Console_Getopt_Exception $e) {
-        // Bad options passed: report usage
-        echo $e->getUsageMessage();
-        return false;
-    }
-
-    if ($getopt->getOption('l')) {
-        // add help messages..
-    }
-
-    if ($getopt->getOption('h')) {
-        echo $getopt->getUsageMessage();
-        return true;
-    }
-
-    if ($getopt->getOption('a')) {
-
-        $front = $application->getBootstrap()->getResource('frontcontroller');
-        $params = array_reverse(explode('/', $getopt->getOption('a')));
-        $module = array_pop($params);
-        $controller = array_pop($params);
-        $action = array_pop($params);
-
-        if (count($params)) {
-            foreach ($params as $param) {
-                $splitedNameValue = explode('=', $param);
-                $passParam[$splitedNameValue[0]] = $splitedNameValue[1];
-            }
-        } else {
-            $passParam = array();
-        }
-
-        $request = new Zend_Controller_Request_Simple($action, $controller, $module, $passParam);
-
-        $front->setRequest($request)
-            ->setResponse(new Zend_Controller_Response_Cli())
-            ->setRouter(new Nc_Controller_Router_Cli());
-
-        $app->run();
-
-    }
-
-}
+$app->run();
+*/

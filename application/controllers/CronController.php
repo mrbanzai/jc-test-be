@@ -696,7 +696,7 @@ class CronController extends Zend_Controller_Action
     }
 
 
-        public function silkroadAction()
+    public function silkroadAction()
     {
         // load the JobTarget scraper
         $Silkroad = new Skookum_Ats_Silkroad($this->_qp);

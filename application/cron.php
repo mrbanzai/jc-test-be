@@ -35,12 +35,6 @@ set_include_path(
     implode(':', $old)
 );
 
-// do the damn thang
-require_once 'Zend/Loader/Autoloader.php';
-$loader = Zend_Loader_Autoloader::getInstance();
-$loader->registerNamespace(array('Skookum_', 'Bayard_'));
-$loader->setFallbackAutoloader(true);
-
 // CLI specific
 $getopt = new Zend_Console_Getopt(
     array(
