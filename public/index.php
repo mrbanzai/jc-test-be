@@ -70,4 +70,3 @@ $app = new Zend_Application(
 $app->bootstrap();
 
 $app->run();
-*/
