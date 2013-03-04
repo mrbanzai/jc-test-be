@@ -57,9 +57,9 @@ Vagrant::Config.run do |config|
   # # }
   #
   config.vm.provision :puppet do |puppet|
-    # puppet.options        = '--verbose --debug'
+    puppet.options        = '--verbose --debug'
     puppet.manifests_path = 'puppet'
-    puppet.manifest_file  = 'default.pp'
+    puppet.manifest_file  = 'production.pp'
     puppet.module_path    = 'puppet/modules'
     puppet.facter = [
       ['db_username', 'jobcastle'],
@@ -104,4 +104,7 @@ Vagrant::Config.run do |config|
   # chef-validator, unless you changed the configuration.
   #
   #   chef.validation_client_name = "ORGNAME-validator"
+
+  config.ssh.forward_agent = true
+
 end
